@@ -1,0 +1,73 @@
+'use client'
+
+import { ArrowUpRight } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
+
+import { Badge } from '@/components/ui/Badge'
+import { Link } from '@/i18n/navigation'
+import type { Locale } from '@/i18n/routing'
+import type { IProject } from '@/types/portfolio'
+import { getLocalizedText } from '@/utils/localize'
+
+import { ProjectCover } from './ProjectCover'
+
+export interface IProjectCardProps {
+  project: IProject
+}
+
+const VISIBLE_TECH_COUNT = 3
+
+// การ์ดผลงานหนึ่งใบ — ทั้งใบเป็นลิงก์ไปหน้ารายละเอียด hover ใช้ transform ล้วน (translate/scale) เท่านั้น
+export function ProjectCard({ project }: IProjectCardProps) {
+  // useLocale() คืน string กว้างๆ เพราะโปรเจกต์นี้ไม่ได้ประกาศ AppConfig ของ next-intl ไว้
+  // แปลงเป็น Locale ตรงนี้ได้อย่างปลอดภัยเพราะ NextIntlClientProvider รับประกันว่าเป็นหนึ่งใน routing.locales เสมอ
+  const locale = useLocale() as Locale
+  const translate = useTranslations('projects')
+
+  const visibleTechStack = project.techStack.slice(0, VISIBLE_TECH_COUNT)
+  const remainingTechCount = project.techStack.length - visibleTechStack.length
+
+  return (
+    <Link
+      href={`/projects/${project.slug}`}
+      className='group flex flex-col overflow-hidden rounded-xl border border-border bg-surface transition-transform duration-300 ease-out hover:-translate-y-1 hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background'
+    >
+      <div className='relative overflow-hidden'>
+        <div className='transition-transform duration-500 ease-out group-hover:scale-105'>
+          <ProjectCover project={project} aspectRatio='card' />
+        </div>
+        <Badge variant='accent' size='sm' className='absolute top-3 left-3'>
+          {translate(`categories.${project.category}`)}
+        </Badge>
+      </div>
+
+      <div className='flex flex-1 flex-col gap-3 p-5'>
+        <div className='flex items-start justify-between gap-3'>
+          <h3 className='text-lg font-semibold tracking-tight text-foreground'>{project.title}</h3>
+          <ArrowUpRight
+            className='mt-1 size-5 shrink-0 text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent'
+            aria-hidden='true'
+          />
+        </div>
+
+        <p className='line-clamp-2 text-sm text-muted-foreground'>
+          {getLocalizedText(project.summary, locale)}
+        </p>
+
+        <div className='mt-auto flex flex-wrap items-center gap-2 pt-2'>
+          {visibleTechStack.map((tech) => (
+            <Badge key={tech} variant='default' size='sm'>
+              {tech}
+            </Badge>
+          ))}
+          {remainingTechCount > 0 && (
+            <Badge variant='muted' size='sm'>
+              +{remainingTechCount}
+            </Badge>
+          )}
+          <span className='ml-auto text-xs font-medium text-subtle-foreground'>{project.year}</span>
+        </div>
+      </div>
+    </Link>
+  )
+}
