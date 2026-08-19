@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
-import { Link } from '@/i18n/navigation'
+import Link from 'next/link'
 import type { IProject } from '@/types/portfolio'
 
 export interface IProjectNavigationProps {
@@ -11,7 +11,12 @@ export interface IProjectNavigationProps {
 }
 
 // การ์ดลิงก์ไปผลงานก่อนหน้า/ถัดไป — ถ้าไม่มีทั้งคู่เลยไม่ต้อง render section นี้เลย
-export function ProjectNavigation({ previous, next, previousLabel, nextLabel }: IProjectNavigationProps) {
+export function ProjectNavigation({
+  previous,
+  next,
+  previousLabel,
+  nextLabel,
+}: IProjectNavigationProps) {
   if (!previous && !next) return null
 
   return (

@@ -7,83 +7,38 @@ import type { IEducation } from '@/types/portfolio'
 export const EDUCATIONS: IEducation[] = [
   {
     id: 'edu-frontend-masters-advanced',
-    institution: {
-      en: 'Frontend Masters',
-      th: 'Frontend Masters',
-    },
-    degree: {
-      en: 'Certificate',
-      th: 'ประกาศนียบัตร',
-    },
-    field: {
-      en: 'Advanced React & Performance Patterns',
-      th: 'React ขั้นสูงและเทคนิคการเพิ่มประสิทธิภาพ',
-    },
+    institution: 'Frontend Masters',
+    degree: 'Certificate',
+    field: 'Advanced React & Performance Patterns',
     startDate: '2022-01',
     endDate: '2022-03',
-    description: {
-      en: 'A focused course on advanced rendering patterns, React Server Components, and web performance profiling.',
-      th: 'คอร์สเจาะลึกเรื่องรูปแบบการ render ขั้นสูง React Server Components และการวิเคราะห์ประสิทธิภาพเว็บ',
-    },
+    description: 'A focused course on advanced rendering patterns, React Server Components, and web performance profiling.',
   },
   {
     id: 'edu-generation-bootcamp',
-    institution: {
-      en: 'Generation Thailand',
-      th: 'Generation Thailand',
-    },
-    degree: {
-      en: 'Bootcamp Certificate',
-      th: 'ประกาศนียบัตรบูตแคมป์',
-    },
-    field: {
-      en: 'Full-Stack Web Development',
-      th: 'การพัฒนาเว็บแบบฟูลสแตก',
-    },
+    institution: 'Generation Thailand',
+    degree: 'Bootcamp Certificate',
+    field: 'Full-Stack Web Development',
     startDate: '2019-06',
     endDate: '2019-09',
     grade: 'Top 5 of cohort',
-    description: {
-      en: 'An intensive 12-week bootcamp covering JavaScript fundamentals, React, Node.js, and agile teamwork.',
-      th: 'บูตแคมป์เข้มข้น 12 สัปดาห์ ครอบคลุมพื้นฐาน JavaScript, React, Node.js และการทำงานเป็นทีมแบบ agile',
-    },
+    description: 'An intensive 12-week bootcamp covering JavaScript fundamentals, React, Node.js, and agile teamwork.',
     activities: [
-      {
-        en: 'Led a team of 4 to build a capstone project presented to industry mentors.',
-        th: 'เป็นหัวหน้าทีม 4 คน สร้างโปรเจกต์จบคอร์สนำเสนอต่อพี่เลี้ยงจากอุตสาหกรรม',
-      },
+      'Led a team of 4 to build a capstone project presented to industry mentors.',
     ],
   },
   {
     id: 'edu-kasetsart-university',
-    institution: {
-      en: 'Kasetsart University',
-      th: 'มหาวิทยาลัยเกษตรศาสตร์',
-    },
-    degree: {
-      en: 'Bachelor of Science',
-      th: 'ปริญญาตรีวิทยาศาสตรบัณฑิต',
-    },
-    field: {
-      en: 'Computer Science',
-      th: 'วิทยาการคอมพิวเตอร์',
-    },
+    institution: 'Kasetsart University',
+    degree: 'Bachelor of Science',
+    field: 'Computer Science',
     startDate: '2015-06',
     endDate: '2019-05',
     grade: '3.42 / 4.00',
-    description: {
-      en: 'Focused on software engineering, human-computer interaction, and web technologies.',
-      th: 'เน้นด้านวิศวกรรมซอฟต์แวร์ ปฏิสัมพันธ์ระหว่างมนุษย์กับคอมพิวเตอร์ และเทคโนโลยีเว็บ',
-    },
+    description: 'Focused on software engineering, human-computer interaction, and web technologies.',
     activities: [
-      {
-        en: 'President of the Computer Science student club for 1 year.',
-        th: 'ประธานชมรมนิสิตวิทยาการคอมพิวเตอร์เป็นเวลา 1 ปี',
-      },
-      {
-        en: 'Won 2nd place in a university-wide hackathon.',
-        th: 'ได้รางวัลรองชนะเลิศอันดับ 2 ในการแข่งขันแฮกกาธอนระดับมหาวิทยาลัย',
-      },
+      'President of the Computer Science student club for 1 year.',
+      'Won 2nd place in a university-wide hackathon.',
     ],
   },
 ]

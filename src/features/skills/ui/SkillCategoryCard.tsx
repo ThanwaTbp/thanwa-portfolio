@@ -1,30 +1,32 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import type { Locale } from '@/i18n/routing'
 import type { ISkillCategory, SkillLevel } from '@/types/portfolio'
-import { getLocalizedText } from '@/utils/localize'
 
 import { SkillLevelMeter } from './SkillLevelMeter'
 
 export interface ISkillCategoryCardProps {
   category: ISkillCategory
-  locale: Locale
   levelLabels: Record<SkillLevel, string>
-  /** สร้างข้อความ ICU plural ของจำนวนปีประสบการณ์ (รับมาจาก server component แม่เพื่อไม่ต้องเรียก getTranslations ซ้ำ) */
   formatYearsOfExperience: (years: number) => string
 }
 
-// การ์ดหนึ่งหมวดทักษะ — แสดงหัวข้อ/คำอธิบายหมวด แล้ววน SkillLevelMeter ของแต่ละ skill
 export function SkillCategoryCard({
   category,
-  locale,
   levelLabels,
   formatYearsOfExperience,
 }: ISkillCategoryCardProps) {
+  const highlightedSkills = category.skills
+    .slice(0, 2)
+    .map((skill) => skill.name)
+    .join(' · ')
+
   return (
-    <Card>
+    <Card className='overflow-hidden border-border/75 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--color-surface)_96%,transparent),color-mix(in_oklab,var(--color-surface-muted)_90%,transparent))]'>
       <CardHeader>
-        <CardTitle>{getLocalizedText(category.title, locale)}</CardTitle>
-        <CardDescription>{getLocalizedText(category.description, locale)}</CardDescription>
+        <p className='text-xs font-semibold uppercase tracking-[0.22em] text-accent'>
+          {highlightedSkills}
+        </p>
+        <CardTitle>{category.title}</CardTitle>
+        <CardDescription>{category.description}</CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-5'>
         {category.skills.map((skill) => (

@@ -1,13 +1,11 @@
 'use client'
 
 import { ArrowUpRight } from 'lucide-react'
-import { useLocale, useTranslations } from 'next-intl'
+import Link from 'next/link'
 
 import { Badge } from '@/components/ui/Badge'
-import { Link } from '@/i18n/navigation'
-import type { Locale } from '@/i18n/routing'
+import { COPY } from '@/constants/copy'
 import type { IProject } from '@/types/portfolio'
-import { getLocalizedText } from '@/utils/localize'
 
 import { ProjectCover } from './ProjectCover'
 
@@ -17,13 +15,7 @@ export interface IProjectCardProps {
 
 const VISIBLE_TECH_COUNT = 3
 
-// การ์ดผลงานหนึ่งใบ — ทั้งใบเป็นลิงก์ไปหน้ารายละเอียด hover ใช้ transform ล้วน (translate/scale) เท่านั้น
 export function ProjectCard({ project }: IProjectCardProps) {
-  // useLocale() คืน string กว้างๆ เพราะโปรเจกต์นี้ไม่ได้ประกาศ AppConfig ของ next-intl ไว้
-  // แปลงเป็น Locale ตรงนี้ได้อย่างปลอดภัยเพราะ NextIntlClientProvider รับประกันว่าเป็นหนึ่งใน routing.locales เสมอ
-  const locale = useLocale() as Locale
-  const translate = useTranslations('projects')
-
   const visibleTechStack = project.techStack.slice(0, VISIBLE_TECH_COUNT)
   const remainingTechCount = project.techStack.length - visibleTechStack.length
 
@@ -37,7 +29,7 @@ export function ProjectCard({ project }: IProjectCardProps) {
           <ProjectCover project={project} aspectRatio='card' />
         </div>
         <Badge variant='accent' size='sm' className='absolute top-3 left-3'>
-          {translate(`categories.${project.category}`)}
+          {COPY.projects.categories[project.category]}
         </Badge>
       </div>
 
@@ -50,9 +42,7 @@ export function ProjectCard({ project }: IProjectCardProps) {
           />
         </div>
 
-        <p className='line-clamp-2 text-sm text-muted-foreground'>
-          {getLocalizedText(project.summary, locale)}
-        </p>
+        <p className='line-clamp-2 text-sm text-muted-foreground'>{project.summary}</p>
 
         <div className='mt-auto flex flex-wrap items-center gap-2 pt-2'>
           {visibleTechStack.map((tech) => (

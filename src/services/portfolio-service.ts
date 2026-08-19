@@ -1,8 +1,3 @@
-import { EDUCATIONS } from '@/constants/educations'
-import { EXPERIENCES } from '@/constants/experiences'
-import { PROFILE } from '@/constants/profile'
-import { PROJECTS } from '@/constants/projects'
-import { SKILL_CATEGORIES } from '@/constants/skills'
 import type {
   IEducation,
   IExperience,
@@ -11,14 +6,8 @@ import type {
   ISkillCategory,
   ProjectCategory,
 } from '@/types/portfolio'
-
-/**
- * portfolio-service.ts
- *
- * แหล่งข้อมูลกลางที่หน้าเว็บเรียกใช้แทนการอ่าน constants ตรงๆ
- * ทุกฟังก์ชันตอนนี้เป็น sync (อ่านจาก constants ในเครื่อง) แต่ตั้งชื่อ/รูปแบบ input-output
- * ให้เปลี่ยนไปเป็น async (ต่อ API หรือ CMS) ในอนาคตได้โดยไม่ต้องแก้โค้ดฝั่ง UI ที่เรียกใช้
- */
+import type { IPortfolioData } from '@/types/portfolio-data'
+import { loadPortfolioData } from '@/services/portfolio-store-service'
 
 export interface IGetProjectsOptions {
   category?: ProjectCategory
@@ -27,21 +16,22 @@ export interface IGetProjectsOptions {
   limit?: number
 }
 
-/** คืนข้อมูลโปรไฟล์เจ้าของเว็บ */
-export function getProfile(): IProfile {
-  return PROFILE
-}
-
-/** เรียงโปรเจกต์ตามปีมาก -> น้อยเสมอ (ใช้ array ใหม่ ไม่แก้ต้นทาง) */
 function sortProjectsByYearDescending(projects: IProject[]): IProject[] {
   return [...projects].sort((firstProject, secondProject) => secondProject.year - firstProject.year)
 }
 
-/**
- * คืนรายการโปรเจกต์ เรียงตามปีล่าสุดก่อนเสมอ กรองได้ตาม category / tech / featuredOnly / limit
- */
-export function getProjects(options?: IGetProjectsOptions): IProject[] {
-  let projects = sortProjectsByYearDescending(PROJECTS)
+async function getData(): Promise<IPortfolioData> {
+  return loadPortfolioData()
+}
+
+export async function getProfile(): Promise<IProfile> {
+  const data = await getData()
+  return data.profile
+}
+
+export async function getProjects(options?: IGetProjectsOptions): Promise<IProject[]> {
+  const data = await getData()
+  let projects = sortProjectsByYearDescending(data.projects)
 
   if (options?.category) {
     projects = projects.filter((project) => project.category === options.category)
@@ -63,14 +53,13 @@ export function getProjects(options?: IGetProjectsOptions): IProject[] {
   return projects
 }
 
-/** คืนเฉพาะโปรเจกต์เด่น (featured: true) เรียงตามปีล่าสุดก่อน */
-export function getFeaturedProjects(limit?: number): IProject[] {
+export async function getFeaturedProjects(limit?: number): Promise<IProject[]> {
   return getProjects({ featuredOnly: true, limit })
 }
 
-/** หาโปรเจกต์จาก slug — คืน undefined ถ้าไม่พบ */
-export function getProjectBySlug(slug: string): IProject | undefined {
-  return PROJECTS.find((project) => project.slug === slug)
+export async function getProjectBySlug(slug: string): Promise<IProject | undefined> {
+  const data = await getData()
+  return data.projects.find((project) => project.slug === slug)
 }
 
 export interface IAdjacentProjects {
@@ -78,12 +67,9 @@ export interface IAdjacentProjects {
   next?: IProject
 }
 
-/**
- * หาโปรเจกต์ก่อนหน้า/ถัดไป สำหรับปุ่มเปลี่ยนหน้าในหน้ารายละเอียดโปรเจกต์
- * อ้างอิงลำดับตามที่เรียงแล้ว (ปีล่าสุดก่อน) และวนลูปกลับไปต้น/ท้ายรายการเมื่อสุดขอบ
- */
-export function getAdjacentProjects(slug: string): IAdjacentProjects {
-  const sortedProjects = sortProjectsByYearDescending(PROJECTS)
+export async function getAdjacentProjects(slug: string): Promise<IAdjacentProjects> {
+  const data = await getData()
+  const sortedProjects = sortProjectsByYearDescending(data.projects)
   const currentIndex = sortedProjects.findIndex((project) => project.slug === slug)
 
   if (currentIndex === -1 || sortedProjects.length <= 1) {
@@ -99,19 +85,19 @@ export function getAdjacentProjects(slug: string): IAdjacentProjects {
   }
 }
 
-/** คืนเฉพาะ category ที่มีโปรเจกต์จริงอยู่ เรียงตามลำดับมาตรฐานของ category */
-export function getProjectCategories(): ProjectCategory[] {
+export async function getProjectCategories(): Promise<ProjectCategory[]> {
+  const data = await getData()
   const categoryOrder: ProjectCategory[] = ['web', 'mobile', 'design', 'other']
-  const categoriesInUse = new Set(PROJECTS.map((project) => project.category))
+  const categoriesInUse = new Set(data.projects.map((project) => project.category))
 
   return categoryOrder.filter((category) => categoriesInUse.has(category))
 }
 
-/** รวม tech stack ของทุกโปรเจกต์แบบไม่ซ้ำ เรียงตามจำนวนที่ใช้งานมาก -> น้อย */
-export function getProjectTechStack(): string[] {
+export async function getProjectTechStack(): Promise<string[]> {
+  const data = await getData()
   const techUsageCount = new Map<string, number>()
 
-  PROJECTS.forEach((project) => {
+  data.projects.forEach((project) => {
     project.techStack.forEach((tech) => {
       techUsageCount.set(tech, (techUsageCount.get(tech) ?? 0) + 1)
     })
@@ -122,26 +108,30 @@ export function getProjectTechStack(): string[] {
     .map(([tech]) => tech)
 }
 
-/** คืนประวัติการทำงาน เรียงจากวันที่เริ่มงานล่าสุดไปเก่าสุด */
-export function getExperiences(): IExperience[] {
-  return [...EXPERIENCES].sort((firstExperience, secondExperience) =>
+export async function getExperiences(): Promise<IExperience[]> {
+  const data = await getData()
+  return [...data.experiences].sort((firstExperience, secondExperience) =>
     secondExperience.startDate.localeCompare(firstExperience.startDate),
   )
 }
 
-/** คืนประวัติการศึกษา เรียงจากวันที่เริ่มเรียนล่าสุดไปเก่าสุด */
-export function getEducations(): IEducation[] {
-  return [...EDUCATIONS].sort((firstEducation, secondEducation) =>
+export async function getEducations(): Promise<IEducation[]> {
+  const data = await getData()
+  return [...data.educations].sort((firstEducation, secondEducation) =>
     secondEducation.startDate.localeCompare(firstEducation.startDate),
   )
 }
 
-/** คืนรายการหมวดทักษะทั้งหมด */
-export function getSkillCategories(): ISkillCategory[] {
-  return [...SKILL_CATEGORIES]
+export async function getSkillCategories(): Promise<ISkillCategory[]> {
+  const data = await getData()
+  return [...data.skillCategories]
 }
 
-/** คืนรายการ slug ของโปรเจกต์ทั้งหมด สำหรับใช้กับ generateStaticParams */
-export function getAllProjectSlugs(): string[] {
-  return PROJECTS.map((project) => project.slug)
+export async function getAllProjectSlugs(): Promise<string[]> {
+  const data = await getData()
+  return data.projects.map((project) => project.slug)
+}
+
+export async function getPortfolioSnapshot(): Promise<IPortfolioData> {
+  return getData()
 }

@@ -1,17 +1,12 @@
 import { ArrowUpRight, Calendar, MapPin } from 'lucide-react'
 
 import { Badge } from '@/components/ui/Badge'
-import type { Locale } from '@/i18n/routing'
 import { cn } from '@/lib/utils'
 import type { IExperience } from '@/types/portfolio'
-import { getLocalizedText } from '@/utils/localize'
 
 export interface IExperienceItemProps {
   experience: IExperience
-  locale: Locale
-  /** true เมื่อยังทำงานอยู่ปัจจุบัน (endDate === null) — ใช้เปลี่ยนสี marker + เปิดวงแหวนกะพริบ */
   isCurrent: boolean
-  /** คำนวณจาก server component แม่แล้วส่งเป็น string ลงมา กันคำนวณเวลาซ้ำในแต่ละฝั่ง */
   dateRangeLabel: string
   durationLabel: string
   employmentTypeLabel: string
@@ -19,10 +14,8 @@ export interface IExperienceItemProps {
   techStackHeading: string
 }
 
-// รายการเดียวของ timeline ประสบการณ์ทำงาน — เป็น server component ล้วนๆ ไม่มี interactivity
 export function ExperienceItem({
   experience,
-  locale,
   isCurrent,
   dateRangeLabel,
   durationLabel,
@@ -52,7 +45,7 @@ export function ExperienceItem({
       <div className='flex flex-col gap-3'>
         <div className='flex flex-wrap items-center gap-x-3 gap-y-1'>
           <h3 className='text-lg font-semibold text-foreground'>
-            {getLocalizedText(experience.position, locale)}
+            {experience.position}
           </h3>
           <Badge variant='accent'>{employmentTypeLabel}</Badge>
         </div>
@@ -79,11 +72,13 @@ export function ExperienceItem({
 
           <span className='inline-flex items-center gap-1'>
             <MapPin className='size-4' aria-hidden='true' />
-            {getLocalizedText(experience.location, locale)}
+            {experience.location}
           </span>
         </div>
 
-        <p className='text-sm text-muted-foreground'>{getLocalizedText(experience.description, locale)}</p>
+        <p className='text-sm text-muted-foreground'>
+          {experience.description}
+        </p>
 
         {hasAchievements && (
           <div className='flex flex-col gap-2'>
@@ -91,8 +86,11 @@ export function ExperienceItem({
             <ul className='flex flex-col gap-1.5'>
               {experience.achievements.map((achievement, achievementIndex) => (
                 <li key={achievementIndex} className='flex gap-2 text-sm text-muted-foreground'>
-                  <span className='mt-2 size-1.5 shrink-0 rounded-full bg-accent' aria-hidden='true' />
-                  {getLocalizedText(achievement, locale)}
+                  <span
+                    className='mt-2 size-1.5 shrink-0 rounded-full bg-accent'
+                    aria-hidden='true'
+                  />
+                  {achievement}
                 </li>
               ))}
             </ul>

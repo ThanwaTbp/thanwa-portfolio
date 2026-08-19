@@ -1,23 +1,17 @@
 import { GraduationCap } from 'lucide-react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import type { Locale } from '@/i18n/routing'
 import type { IEducation } from '@/types/portfolio'
-import { getLocalizedText } from '@/utils/localize'
 
 export interface IEducationItemProps {
   education: IEducation
-  locale: Locale
-  /** คำนวณจาก server component แม่แล้วส่งเป็น string ลงมา */
   dateRangeLabel: string
   gradeHeading: string
   activitiesHeading: string
 }
 
-// รายการเดียวของ timeline ประวัติการศึกษา — ครอบด้วย Card ต่อรายการให้ต่างจากหน้า experience
 export function EducationItem({
   education,
-  locale,
   dateRangeLabel,
   gradeHeading,
   activitiesHeading,
@@ -33,9 +27,9 @@ export function EducationItem({
       <Card>
         <CardHeader>
           <CardTitle>
-            {getLocalizedText(education.degree, locale)} · {getLocalizedText(education.field, locale)}
+            {education.degree} · {education.field}
           </CardTitle>
-          <CardDescription>{getLocalizedText(education.institution, locale)}</CardDescription>
+          <CardDescription>{education.institution}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-4'>
           <span className='text-sm text-muted-foreground'>{dateRangeLabel}</span>
@@ -48,7 +42,9 @@ export function EducationItem({
           )}
 
           {education.description && (
-            <p className='text-sm text-muted-foreground'>{getLocalizedText(education.description, locale)}</p>
+            <p className='text-sm text-muted-foreground'>
+              {education.description}
+            </p>
           )}
 
           {hasActivities && (
@@ -57,8 +53,11 @@ export function EducationItem({
               <ul className='flex flex-col gap-1.5'>
                 {education.activities?.map((activity, activityIndex) => (
                   <li key={activityIndex} className='flex gap-2 text-sm text-muted-foreground'>
-                    <span className='mt-2 size-1.5 shrink-0 rounded-full bg-accent' aria-hidden='true' />
-                    {getLocalizedText(activity, locale)}
+                    <span
+                      className='mt-2 size-1.5 shrink-0 rounded-full bg-accent'
+                      aria-hidden='true'
+                    />
+                    {activity}
                   </li>
                 ))}
               </ul>

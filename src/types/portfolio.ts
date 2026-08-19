@@ -1,36 +1,30 @@
-/** ค่าข้อความที่ต้องแสดงได้ทั้ง 2 ภาษา — key ตรงกับ locale ที่รองรับ */
-export interface ILocalizedText {
-  en: string
-  th: string
-}
-
 export type ProjectCategory = 'web' | 'mobile' | 'design' | 'other'
 
 export interface IProjectLink {
-  label: ILocalizedText
+  label: string
   url: string
   type: 'live' | 'repo' | 'case-study'
 }
 
 export interface IProjectMetric {
-  label: ILocalizedText
+  label: string
   value: string
 }
 
 export interface IProject {
   slug: string
   title: string
-  summary: ILocalizedText
-  description: ILocalizedText
+  summary: string
+  description: string
   category: ProjectCategory
-  role: ILocalizedText
+  role: string
   /** ปีที่ทำโปรเจกต์ ใช้เรียงลำดับและกรอง */
   year: number
   featured: boolean
   coverImage?: string
   gallery?: string[]
   techStack: string[]
-  highlights: ILocalizedText[]
+  highlights: string[]
   metrics?: IProjectMetric[]
   links?: IProjectLink[]
 }
@@ -40,29 +34,29 @@ export type EmploymentType = 'full-time' | 'part-time' | 'freelance' | 'contract
 export interface IExperience {
   id: string
   company: string
-  position: ILocalizedText
+  position: string
   employmentType: EmploymentType
-  location: ILocalizedText
+  location: string
   /** รูปแบบ YYYY-MM */
   startDate: string
   /** null = ยังทำงานอยู่ปัจจุบัน */
   endDate: string | null
-  description: ILocalizedText
-  achievements: ILocalizedText[]
+  description: string
+  achievements: string[]
   techStack: string[]
   companyUrl?: string
 }
 
 export interface IEducation {
   id: string
-  institution: ILocalizedText
-  degree: ILocalizedText
-  field: ILocalizedText
+  institution: string
+  degree: string
+  field: string
   startDate: string
   endDate: string | null
   grade?: string
-  description?: ILocalizedText
-  activities?: ILocalizedText[]
+  description?: string
+  activities?: string[]
 }
 
 export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert'
@@ -76,8 +70,8 @@ export interface ISkill {
 
 export interface ISkillCategory {
   id: string
-  title: ILocalizedText
-  description: ILocalizedText
+  title: string
+  description: string
   skills: ISkill[]
 }
 
@@ -88,16 +82,16 @@ export interface ISocialLink {
 }
 
 export interface IProfileStat {
-  label: ILocalizedText
+  label: string
   value: number
   suffix?: string
 }
 
 export interface IProfile {
-  name: ILocalizedText
-  headline: ILocalizedText
-  bio: ILocalizedText
-  location: ILocalizedText
+  name: string
+  headline: string
+  bio: string
+  location: string
   avatar?: string
   resumeUrl?: string
   available: boolean

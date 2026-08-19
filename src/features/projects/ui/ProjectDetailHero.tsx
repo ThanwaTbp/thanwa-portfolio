@@ -1,16 +1,13 @@
 'use client'
 
 import { useGSAP } from '@gsap/react'
-import { useLocale } from 'next-intl'
 import { useRef } from 'react'
 
 import { TextReveal } from '@/components/common/TextReveal'
 import { Badge } from '@/components/ui/Badge'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
-import type { Locale } from '@/i18n/routing'
 import { gsap } from '@/lib/animation'
 import type { IProject } from '@/types/portfolio'
-import { getLocalizedText } from '@/utils/localize'
 
 import { ProjectCover } from './ProjectCover'
 
@@ -24,9 +21,6 @@ const PARALLAX_DISTANCE = 60
 
 // hero ของหน้ารายละเอียดผลงาน — cover ใหญ่มี parallax เบาๆ ตอน scroll (ขยับด้วย transform เท่านั้น)
 export function ProjectDetailHero({ project, categoryLabel }: IProjectDetailHeroProps) {
-  // useLocale() คืน string กว้างๆ เพราะโปรเจกต์นี้ไม่ได้ประกาศ AppConfig ของ next-intl ไว้
-  // แปลงเป็น Locale ตรงนี้ได้อย่างปลอดภัยเพราะ NextIntlClientProvider รับประกันว่าเป็นหนึ่งใน routing.locales เสมอ
-  const locale = useLocale() as Locale
   const parallaxRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
 
@@ -72,7 +66,9 @@ export function ProjectDetailHero({ project, categoryLabel }: IProjectDetailHero
         className='text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl'
       />
 
-      <p className='max-w-2xl text-lg text-muted-foreground'>{getLocalizedText(project.summary, locale)}</p>
+      <p className='max-w-2xl text-lg text-muted-foreground'>
+        {project.summary}
+      </p>
 
       <div className='relative aspect-[21/9] w-full overflow-hidden rounded-2xl'>
         <div ref={parallaxRef} className='absolute inset-x-0 -top-[30px] h-[calc(100%+60px)]'>

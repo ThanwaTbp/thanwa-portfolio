@@ -6,14 +6,8 @@ import type { ISkillCategory } from '@/types/portfolio'
 export const SKILL_CATEGORIES: ISkillCategory[] = [
   {
     id: 'skill-frontend-frameworks',
-    title: {
-      en: 'Frontend Frameworks',
-      th: 'เฟรมเวิร์กฝั่ง Frontend',
-    },
-    description: {
-      en: 'Frameworks I use daily to build modern, production-grade interfaces.',
-      th: 'เฟรมเวิร์กที่ใช้งานเป็นประจำในการสร้างหน้าเว็บระดับ production',
-    },
+    title: 'Frontend Frameworks',
+    description: 'Frameworks I use daily to build modern, production-grade interfaces.',
     skills: [
       { name: 'React', level: 'expert', yearsOfExperience: 5 },
       { name: 'Next.js', level: 'expert', yearsOfExperience: 4 },
@@ -24,14 +18,8 @@ export const SKILL_CATEGORIES: ISkillCategory[] = [
   },
   {
     id: 'skill-languages-styling',
-    title: {
-      en: 'Languages & Styling',
-      th: 'ภาษาและการจัดสไตล์',
-    },
-    description: {
-      en: 'Core languages and styling tools behind every interface I build.',
-      th: 'ภาษาหลักและเครื่องมือจัดสไตล์ที่อยู่เบื้องหลังทุกหน้าเว็บที่สร้าง',
-    },
+    title: 'Languages & Styling',
+    description: 'Core languages and styling tools behind every interface I build.',
     skills: [
       { name: 'TypeScript', level: 'expert', yearsOfExperience: 5 },
       { name: 'JavaScript (ES2023)', level: 'expert', yearsOfExperience: 6 },
@@ -42,14 +30,8 @@ export const SKILL_CATEGORIES: ISkillCategory[] = [
   },
   {
     id: 'skill-animation-motion',
-    title: {
-      en: 'Animation & Motion',
-      th: 'แอนิเมชันและการเคลื่อนไหว',
-    },
-    description: {
-      en: 'Tools for building smooth, purposeful motion across web and mobile.',
-      th: 'เครื่องมือสำหรับสร้างแอนิเมชันที่ลื่นไหลและมีจุดประสงค์ชัดเจนทั้งบนเว็บและมือถือ',
-    },
+    title: 'Animation & Motion',
+    description: 'Tools for building smooth, purposeful motion across web and mobile.',
     skills: [
       { name: 'GSAP', level: 'expert', yearsOfExperience: 4 },
       { name: 'Motion (Framer Motion)', level: 'advanced', yearsOfExperience: 3 },
@@ -59,14 +41,8 @@ export const SKILL_CATEGORIES: ISkillCategory[] = [
   },
   {
     id: 'skill-tooling-workflow',
-    title: {
-      en: 'Tooling & Workflow',
-      th: 'เครื่องมือและกระบวนการทำงาน',
-    },
-    description: {
-      en: 'The tooling that keeps development fast, consistent, and collaborative.',
-      th: 'เครื่องมือที่ช่วยให้การพัฒนางานรวดเร็ว สม่ำเสมอ และทำงานร่วมกับทีมได้ดี',
-    },
+    title: 'Tooling & Workflow',
+    description: 'The tooling that keeps development fast, consistent, and collaborative.',
     skills: [
       { name: 'Git', level: 'expert', yearsOfExperience: 6 },
       { name: 'Vite', level: 'advanced', yearsOfExperience: 3 },
@@ -78,14 +54,8 @@ export const SKILL_CATEGORIES: ISkillCategory[] = [
   },
   {
     id: 'skill-backend-data',
-    title: {
-      en: 'Backend & Data',
-      th: 'Backend และการจัดการข้อมูล',
-    },
-    description: {
-      en: 'Enough backend fluency to design APIs and data models alongside the UI.',
-      th: 'ความรู้ฝั่ง backend ที่มากพอสำหรับออกแบบ API และโครงสร้างข้อมูลควบคู่กับ UI',
-    },
+    title: 'Backend & Data',
+    description: 'Enough backend fluency to design APIs and data models alongside the UI.',
     skills: [
       { name: 'Node.js', level: 'advanced', yearsOfExperience: 4 },
       { name: 'Supabase', level: 'advanced', yearsOfExperience: 2 },

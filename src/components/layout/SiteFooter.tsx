@@ -1,18 +1,15 @@
 import type { ComponentType } from 'react'
-import { Mail } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
+import { ArrowUpRight, Mail } from 'lucide-react'
+import Link from 'next/link'
 
-interface IFooterNavItem {
-  href: string
-  label: string
-}
+import FooterAdminAction from '@/components/layout/FooterAdminAction'
+import { COPY } from '@/constants/copy'
+import { getProfile } from '@/services/portfolio-service'
 
 interface ISocialIconProps {
   className?: string
 }
 
-// lucide-react เวอร์ชันนี้ไม่มีไอคอนแบรนด์ (GitHub/LinkedIn) จึงทำ SVG มาร์คขั้นต่ำไว้ใช้เอง
 function GithubIcon({ className }: ISocialIconProps) {
   return (
     <svg viewBox='0 0 24 24' fill='currentColor' className={className} aria-hidden='true'>
@@ -29,83 +26,114 @@ function LinkedinIcon({ className }: ISocialIconProps) {
   )
 }
 
-interface IFooterSocialLink {
-  href: string
-  label: string
-  icon: ComponentType<ISocialIconProps>
-}
-
 export default async function SiteFooter() {
-  const translate = await getTranslations('nav')
-  const translateCommon = await getTranslations('common')
-  const translateFooter = await getTranslations('footer')
   const currentYear = new Date().getFullYear()
+  const profile = await getProfile()
 
-  const quickLinks: IFooterNavItem[] = [
-    { href: '/', label: translate('home') },
-    { href: '/projects', label: translate('projects') },
-    { href: '/experience', label: translate('experience') },
-    { href: '/education', label: translate('education') },
-    { href: '/skills', label: translate('skills') },
+  const navLinks = [
+    { href: '/projects', label: COPY.nav.projects },
+    { href: '/experience', label: COPY.nav.experience },
+    { href: '/skills', label: COPY.nav.skills },
   ]
 
-  // URL เป็น placeholder ไว้ก่อน — รอข้อมูลจริงจาก IProfile.socials
-  const socialLinks: IFooterSocialLink[] = [
-    { href: 'https://github.com/', label: 'GitHub', icon: GithubIcon },
-    { href: 'https://linkedin.com/', label: 'LinkedIn', icon: LinkedinIcon },
-    { href: 'mailto:hello@example.com', label: 'Email', icon: Mail },
-  ]
+  const socialLinks: Record<string, ComponentType<ISocialIconProps>> = {
+    github: GithubIcon,
+    linkedin: LinkedinIcon,
+    email: Mail,
+  }
+
+  const visibleSocials = profile.socials.filter((socialLink) => socialLinks[socialLink.platform])
+  const emailSocial = visibleSocials.find((socialLink) => socialLink.platform === 'email')
 
   return (
-    <footer className='border-t border-border'>
-      <div className='mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-3 lg:px-8'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-base font-semibold tracking-tight text-foreground'>
-            {translateCommon('siteName')}
-          </span>
-          <p className='max-w-xs text-sm text-muted-foreground'>{translateCommon('tagline')}</p>
-        </div>
+    <footer className='relative mt-auto shrink-0 border-t border-border/70 bg-surface-muted'>
+      <div
+        aria-hidden='true'
+        className='pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--color-accent),var(--color-accent-2),transparent)]'
+      />
 
-        <div className='flex flex-col gap-3'>
-          <span className='text-sm font-medium text-foreground'>
-            {translateFooter('quickLinks')}
-          </span>
-          <nav className='flex flex-col gap-2'>
-            {quickLinks.map((quickLink) => (
-              <Link
-                key={quickLink.href}
-                href={quickLink.href}
-                className='text-sm text-muted-foreground transition-colors hover:text-foreground'
-              >
-                {quickLink.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
+      <div className='mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8'>
+        <div className='flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between'>
+          <div className='max-w-md space-y-4'>
+            <Link
+              href='/'
+              className='inline-flex items-center gap-3 text-lg font-semibold tracking-tight text-foreground'
+            >
+              <span className='inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-accent/25 bg-accent/10 text-sm text-accent'>
+                T
+              </span>
+              {COPY.common.siteName}
+            </Link>
+            <p className='text-sm leading-7 text-muted-foreground'>{COPY.common.tagline}</p>
+            {profile.available ? (
+              <p className='inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/8 px-3 py-1.5 text-xs font-medium text-accent'>
+                <span className='size-1.5 rounded-full bg-accent' aria-hidden='true' />
+                {COPY.footer.statusLabel}
+              </p>
+            ) : null}
+          </div>
 
-        <div className='flex flex-col gap-3'>
-          <span className='text-sm font-medium text-foreground'>{translateFooter('connect')}</span>
-          <div className='flex items-center gap-3'>
-            {socialLinks.map((socialLink) => (
-              <a
-                key={socialLink.label}
-                href={socialLink.href}
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label={socialLink.label}
-                className='flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground'
-              >
-                <socialLink.icon className='size-4' />
-              </a>
-            ))}
+          <div className='grid gap-10 sm:grid-cols-2 sm:gap-16 lg:gap-20'>
+            <div className='min-w-[9rem]'>
+              <p className='text-xs font-semibold tracking-[0.18em] text-subtle-foreground uppercase'>
+                {COPY.footer.quickLinks}
+              </p>
+              <nav className='mt-4 flex flex-col gap-2.5'>
+                {navLinks.map((navLink) => (
+                  <Link
+                    key={navLink.href}
+                    href={navLink.href}
+                    className='text-sm text-muted-foreground transition-colors hover:text-foreground'
+                  >
+                    {navLink.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+
+            <div className='min-w-[9rem]'>
+              <p className='text-xs font-semibold tracking-[0.18em] text-subtle-foreground uppercase'>
+                {COPY.footer.connect}
+              </p>
+              <div className='mt-4 flex flex-wrap gap-2'>
+                {visibleSocials.map((socialLink) => {
+                  const SocialIcon = socialLinks[socialLink.platform]
+
+                  return (
+                    <a
+                      key={socialLink.label}
+                      href={socialLink.url}
+                      target={socialLink.platform === 'email' ? undefined : '_blank'}
+                      rel={socialLink.platform === 'email' ? undefined : 'noopener noreferrer'}
+                      aria-label={socialLink.label}
+                      className='inline-flex size-10 items-center justify-center rounded-full border border-border/75 bg-surface text-muted-foreground transition-colors hover:border-accent/30 hover:text-foreground'
+                    >
+                      <SocialIcon className='size-4' />
+                    </a>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className='border-t border-border px-4 py-6 sm:px-6 lg:px-8'>
-        <p className='text-center text-xs text-subtle-foreground'>
-          © {currentYear} {translateCommon('siteName')} · {translateFooter('allRightsReserved')}
-        </p>
+        <div className='mt-10 flex flex-col gap-4 border-t border-border/60 pt-6 text-xs text-subtle-foreground sm:flex-row sm:items-center sm:justify-between'>
+          <p>
+            © {currentYear} {COPY.common.siteName} · {COPY.footer.allRightsReserved}
+          </p>
+          <div className='flex flex-wrap items-center gap-x-5 gap-y-2'>
+            <FooterAdminAction />
+            {emailSocial ? (
+              <a
+                href={emailSocial.url}
+                className='inline-flex items-center gap-1 transition-colors hover:text-foreground'
+              >
+                {COPY.footer.contact}
+                <ArrowUpRight className='size-3.5' aria-hidden='true' />
+              </a>
+            ) : null}
+          </div>
+        </div>
       </div>
     </footer>
   )

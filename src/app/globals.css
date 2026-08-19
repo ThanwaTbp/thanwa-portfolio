@@ -4,47 +4,47 @@
 
 /* ── Design tokens: Minimal / Modern ────────────────────────────── */
 :root {
-  --background: oklch(0.99 0.002 265);
-  --foreground: oklch(0.18 0.008 265);
+  --background: oklch(0.985 0.006 274);
+  --foreground: oklch(0.21 0.018 274);
 
-  --surface: oklch(1 0 0);
-  --surface-muted: oklch(0.968 0.004 265);
-  --border: oklch(0.9 0.005 265);
-  --border-strong: oklch(0.83 0.008 265);
+  --surface: oklch(0.995 0.004 274);
+  --surface-muted: oklch(0.962 0.011 274);
+  --border: oklch(0.91 0.01 274);
+  --border-strong: oklch(0.83 0.016 274);
 
-  --muted-foreground: oklch(0.52 0.012 265);
-  --subtle-foreground: oklch(0.65 0.01 265);
+  --muted-foreground: oklch(0.5 0.024 274);
+  --subtle-foreground: oklch(0.63 0.018 274);
 
-  --accent: oklch(0.58 0.21 274);
-  --accent-foreground: oklch(0.99 0.002 265);
-  --accent-soft: oklch(0.94 0.035 274);
-  --accent-2: oklch(0.72 0.14 205);
+  --accent: oklch(0.62 0.23 285);
+  --accent-foreground: oklch(0.99 0.004 274);
+  --accent-soft: oklch(0.93 0.05 285);
+  --accent-2: oklch(0.74 0.15 210);
 
-  --ring: oklch(0.58 0.21 274 / 0.45);
-  --shadow-color: 265 15% 12%;
+  --ring: oklch(0.62 0.23 285 / 0.4);
+  --shadow-color: 274 28% 16%;
 
   --radius: 0.875rem;
 }
 
 .dark {
-  --background: oklch(0.16 0.008 265);
-  --foreground: oklch(0.96 0.004 265);
+  --background: oklch(0.17 0.014 274);
+  --foreground: oklch(0.965 0.008 274);
 
-  --surface: oklch(0.2 0.009 265);
-  --surface-muted: oklch(0.235 0.01 265);
-  --border: oklch(0.29 0.01 265);
-  --border-strong: oklch(0.38 0.012 265);
+  --surface: oklch(0.215 0.015 274);
+  --surface-muted: oklch(0.248 0.018 274);
+  --border: oklch(0.3 0.018 274);
+  --border-strong: oklch(0.4 0.024 274);
 
-  --muted-foreground: oklch(0.7 0.012 265);
-  --subtle-foreground: oklch(0.56 0.012 265);
+  --muted-foreground: oklch(0.72 0.018 274);
+  --subtle-foreground: oklch(0.58 0.018 274);
 
-  --accent: oklch(0.7 0.18 274);
-  --accent-foreground: oklch(0.16 0.008 265);
-  --accent-soft: oklch(0.3 0.06 274);
-  --accent-2: oklch(0.78 0.13 205);
+  --accent: oklch(0.74 0.19 286);
+  --accent-foreground: oklch(0.16 0.014 274);
+  --accent-soft: oklch(0.31 0.08 286);
+  --accent-2: oklch(0.79 0.13 212);
 
-  --ring: oklch(0.7 0.18 274 / 0.5);
-  --shadow-color: 265 40% 2%;
+  --ring: oklch(0.74 0.19 286 / 0.5);
+  --shadow-color: 274 45% 5%;
 }
 
 @theme inline {
@@ -63,7 +63,8 @@
   --color-ring: var(--ring);
 
   --font-sans: var(--font-bai-jamjuree), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-jetbrains-mono), var(--font-bai-jamjuree), ui-monospace, monospace;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --radius-sm: calc(var(--radius) - 0.5rem);
   --radius-md: calc(var(--radius) - 0.25rem);
@@ -85,10 +86,26 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    min-height: 100%;
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(
+        circle at top,
+        color-mix(in oklab, var(--color-accent) 10%, transparent),
+        transparent 28%
+      ),
+      radial-gradient(
+        circle at 85% 20%,
+        color-mix(in oklab, var(--color-accent-2) 12%, transparent),
+        transparent 24%
+      );
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 
   body {
-    background-color: var(--color-background);
+    min-height: 100%;
+    background: transparent;
     color: var(--color-foreground);
     font-feature-settings: 'ss01', 'cv01';
     text-rendering: optimizeLegibility;
@@ -149,8 +166,32 @@
   }
 
   .glass {
-    background-color: color-mix(in oklab, var(--color-background) 72%, transparent);
+    background-color: color-mix(in oklab, var(--color-background) 82%, transparent);
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
+  }
+
+  .admin-input,
+  .admin-textarea {
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
+    background-color: color-mix(in oklab, var(--color-background) 80%, transparent);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-foreground);
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .admin-input:focus,
+  .admin-textarea:focus {
+    border-color: var(--color-accent);
+  }
+
+  .admin-textarea {
+    resize: vertical;
+    min-height: 5rem;
   }
 }

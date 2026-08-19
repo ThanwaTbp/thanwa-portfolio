@@ -1,4 +1,5 @@
 import { MarqueeRow } from '@/components/common/MarqueeRow'
+import { TechIcon } from '@/components/common/TechIcon'
 import { Badge } from '@/components/ui/Badge'
 
 export interface ITechStackMarqueeProps {
@@ -18,7 +19,13 @@ export function TechStackMarquee({ techStack }: ITechStackMarqueeProps) {
     <div className='flex flex-col gap-4'>
       <MarqueeRow direction='left'>
         {firstRowTech.map((tech) => (
-          <Badge key={tech} variant='outline' size='md' className='shrink-0'>
+          <Badge
+            key={tech}
+            variant='outline'
+            size='md'
+            className='shrink-0 gap-2 border-border/75 bg-surface/80'
+          >
+            <TechIcon name={tech} className='size-3.5' />
             {tech}
           </Badge>
         ))}
@@ -27,7 +34,13 @@ export function TechStackMarquee({ techStack }: ITechStackMarqueeProps) {
       {secondRowTech.length > 0 && (
         <MarqueeRow direction='right'>
           {secondRowTech.map((tech) => (
-            <Badge key={tech} variant='outline' size='md' className='shrink-0'>
+            <Badge
+              key={tech}
+              variant='outline'
+              size='md'
+              className='shrink-0 gap-2 border-border/75 bg-surface/80'
+            >
+              <TechIcon name={tech} className='size-3.5' />
               {tech}
             </Badge>
           ))}

@@ -1,28 +1,26 @@
-import { ArrowUpRight, Download, Globe, Mail, X } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { ArrowDownRight, Globe, Mail, X } from 'lucide-react'
+import Link from 'next/link'
 import type { ComponentType } from 'react'
 
-import { Link } from '@/i18n/navigation'
-import type { Locale } from '@/i18n/routing'
 import type { IProfile, ISocialLink } from '@/types/portfolio'
-import { getLocalizedText } from '@/utils/localize'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/Badge'
 import { buttonVariants } from '@/components/ui/Button'
 import { GridPattern } from '@/components/common/GridPattern'
 import { MagneticButton } from '@/components/common/MagneticButton'
-import { TextReveal } from '@/components/common/TextReveal'
+import { TechIcon } from '@/components/common/TechIcon'
+import { TypewriterText } from '@/components/common/TypewriterText'
+import { HeroCodePanel } from '@/features/home/ui/HeroCodePanel'
+import { COPY } from '@/constants/copy'
 
 export interface IHeroSectionProps {
   profile: IProfile
-  locale: Locale
 }
 
 interface ISocialIconProps {
   className?: string
 }
 
-// lucide-react เวอร์ชันนี้ไม่มีไอคอนแบรนด์ GitHub/LinkedIn จึงทำ SVG มาร์คขั้นต่ำไว้ใช้เอง
 function GithubIcon({ className }: ISocialIconProps) {
   return (
     <svg viewBox='0 0 24 24' fill='currentColor' className={className} aria-hidden='true'>
@@ -41,14 +39,20 @@ function LinkedinIcon({ className }: ISocialIconProps) {
 
 function DribbbleIcon({ className }: ISocialIconProps) {
   return (
-    <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth={1.5} className={className} aria-hidden='true'>
+    <svg
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth={1.5}
+      className={className}
+      aria-hidden='true'
+    >
       <circle cx='12' cy='12' r='10.5' />
       <path d='M4 9.2c3.4 1 8.9 1.2 15.6-1.1M2.8 15.2c5.6-2.2 12.4-2.6 17.7.3M9.4 3c2.9 4 5 9.9 5.3 17.6' />
     </svg>
   )
 }
 
-// map platform -> icon component เพื่อ render แถว social link ให้กระชับ
 const SOCIAL_ICON_MAP: Record<ISocialLink['platform'], ComponentType<ISocialIconProps>> = {
   github: GithubIcon,
   linkedin: LinkedinIcon,
@@ -58,87 +62,82 @@ const SOCIAL_ICON_MAP: Record<ISocialLink['platform'], ComponentType<ISocialIcon
   website: Globe,
 }
 
-// แบ่งข้อความ headline ออกเป็นสองท่อนคร่าวๆ ให้ครึ่งหลังใช้ .text-gradient
-// ทำแบบ deterministic (แบ่งกลางประโยคตามจำนวนคำ) เพื่อไม่ผูกกับเนื้อหาภาษาใดภาษาหนึ่งโดยเฉพาะ
-function splitHeadlineForHighlight(headline: string): { lead: string, highlight: string } {
-  const words = headline.trim().split(/\s+/)
-  const highlightStartIndex = Math.ceil(words.length / 2)
+const HERO_STACK = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'] as const
 
-  return {
-    lead: words.slice(0, highlightStartIndex).join(' '),
-    highlight: words.slice(highlightStartIndex).join(' '),
-  }
-}
-
-export async function HeroSection({ profile, locale }: IHeroSectionProps) {
-  const translate = await getTranslations('home')
-  const translateCommon = await getTranslations('common')
-
-  const headlineText = getLocalizedText(profile.headline, locale)
-  const { lead: headlineLead, highlight: headlineHighlight } = splitHeadlineForHighlight(headlineText)
-  const emailSocial = profile.socials.find((social) => social.platform === 'email')
+export function HeroSection({ profile }: IHeroSectionProps) {
+  const nameText = profile.name
+  const roleText = profile.headline
+  const locationText = profile.location
+  const heroRoles = [...COPY.home.heroRoles]
 
   return (
-    <section className='relative isolate flex min-h-[calc(100dvh-4rem)] items-center justify-center overflow-hidden'>
-      {/* พื้นหลัง: ตารางจางๆ + แสง accent เบลอ ไม่รับ pointer event */}
-      <GridPattern className='opacity-60' />
+    <section
+      id='top'
+      className='relative isolate overflow-hidden border-b border-border/80 bg-[radial-gradient(circle_at_top,rgba(122,92,255,0.15),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(20,184,166,0.12),transparent_30%)]'
+    >
+      <GridPattern className='opacity-40' />
       <div
         aria-hidden='true'
-        className='pointer-events-none absolute -top-40 left-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl'
+        className='pointer-events-none absolute -top-32 left-[15%] size-[28rem] rounded-full bg-accent/20 blur-3xl'
       />
       <div
         aria-hidden='true'
-        className='pointer-events-none absolute -bottom-24 -right-16 size-96 rounded-full bg-accent-2/20 blur-3xl'
+        className='pointer-events-none absolute -right-20 bottom-10 size-[24rem] rounded-full bg-accent-2/16 blur-3xl'
       />
 
-      <div className='relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-6 px-4 py-24 text-center sm:px-6 lg:px-8'>
-        <Badge variant={profile.available ? 'accent' : 'muted'} size='md' className='gap-2'>
-          {/* จุดกะพริบใช้ Tailwind animate-pulse (opacity) ซึ่งถูกปิดอัตโนมัติเมื่อผู้ใช้เปิด reduced motion ผ่านกฎ global ใน globals.css */}
-          <span
-            className={cn(
-              'size-2 rounded-full',
-              profile.available ? 'animate-pulse bg-emerald-500 dark:bg-emerald-400' : 'bg-subtle-foreground',
-            )}
-            aria-hidden='true'
-          />
-          {profile.available ? translateCommon('availableForWork') : translateCommon('notAvailable')}
-        </Badge>
-
-        <p className='text-sm font-medium text-muted-foreground sm:text-base'>{translate('heroGreeting')}</p>
-
-        <h1 className='text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl'>
-          <TextReveal as='span' text={headlineLead} trigger='mount' className='inline' />{' '}
-          {headlineHighlight && (
-            <TextReveal
-              as='span'
-              text={headlineHighlight}
-              trigger='mount'
-              delay={0.15}
-              className='inline text-gradient'
+      <div className='relative z-10 mx-auto grid min-h-[calc(100dvh-4rem)] max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-24'>
+        <div className='flex flex-col items-start gap-6'>
+          <Badge variant={profile.available ? 'accent' : 'muted'} size='md' className='gap-2'>
+            <span
+              className={cn(
+                'size-2 rounded-full',
+                profile.available
+                  ? 'bg-emerald-500 shadow-[0_0_0_5px_rgba(16,185,129,0.14)]'
+                  : 'bg-subtle-foreground',
+              )}
+              aria-hidden='true'
             />
-          )}
-        </h1>
+            {profile.available ? COPY.common.availableForWork : COPY.common.notAvailable}
+          </Badge>
 
-        <p className='max-w-2xl text-base text-muted-foreground sm:text-lg'>{translate('heroIntro')}</p>
+          <div className='space-y-4'>
+            <p className='text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground'>
+              {COPY.home.heroGreeting}
+            </p>
 
-        <div className='mt-2 flex flex-col items-center gap-3 sm:flex-row'>
+            <h1 className='font-display max-w-xl text-balance text-5xl font-semibold leading-[1.12] tracking-[-0.04em] text-foreground sm:text-6xl lg:text-[4.75rem]'>
+              <span className='text-gradient'>{nameText}</span>
+            </h1>
+
+            <p className='min-h-[1.75em] text-xl font-medium tracking-tight text-foreground sm:text-2xl'>
+              <TypewriterText texts={heroRoles} className='text-gradient' />
+            </p>
+
+            <p className='max-w-xl text-base leading-7 text-muted-foreground sm:text-lg'>
+              {COPY.home.heroIntro}
+            </p>
+          </div>
+
           <MagneticButton>
             <Link href='/projects' className={buttonVariants({ variant: 'primary', size: 'lg' })}>
-              {translate('ctaProjects')}
-              <ArrowUpRight className='size-4' aria-hidden='true' />
+              {COPY.home.ctaProjects}
+              <ArrowDownRight className='size-4' aria-hidden='true' />
             </Link>
           </MagneticButton>
-          {emailSocial && (
-            <MagneticButton>
-              <a href={emailSocial.url} className={buttonVariants({ variant: 'outline', size: 'lg' })}>
-                {translate('ctaContact')}
-              </a>
-            </MagneticButton>
-          )}
-        </div>
 
-        <div className='mt-4 flex flex-col items-center gap-4'>
-          <div className='flex items-center gap-2'>
+          <div className='flex flex-wrap gap-2 pt-1'>
+            {HERO_STACK.map((tech) => (
+              <span
+                key={tech}
+                className='inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/88 px-3 py-1.5 text-sm text-foreground shadow-sm shadow-black/5'
+              >
+                <TechIcon name={tech} />
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className='flex flex-wrap items-center gap-2 pt-1'>
             {profile.socials.map((social) => {
               const SocialIcon = SOCIAL_ICON_MAP[social.platform]
 
@@ -149,45 +148,22 @@ export async function HeroSection({ profile, locale }: IHeroSectionProps) {
                   target={social.platform === 'email' ? undefined : '_blank'}
                   rel={social.platform === 'email' ? undefined : 'noopener noreferrer'}
                   aria-label={social.label}
-                  className='flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground'
+                  className='inline-flex size-10 items-center justify-center rounded-full border border-border/75 text-muted-foreground transition-colors hover:border-accent/30 hover:text-foreground'
                 >
                   <SocialIcon className='size-4' />
                 </a>
               )
             })}
           </div>
-
-          {profile.resumeUrl && (
-            <a
-              href={profile.resumeUrl}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground'
-            >
-              <Download className='size-4' aria-hidden='true' />
-              {translateCommon('downloadResume')}
-            </a>
-          )}
         </div>
-      </div>
 
-      {/* คำชวนเลื่อนดูต่อ — ลูกศรขยับด้วย Tailwind animate-bounce (transform) ซ่อนบนจอเตี้ยกันชนกับเนื้อหา */}
-      <div
-        aria-hidden='true'
-        className='pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1.5 [@media(max-height:640px)]:hidden sm:flex'
-      >
-        <span className='text-xs font-medium tracking-wide text-subtle-foreground'>
-          {translateCommon('scrollToExplore')}
-        </span>
-        <svg
-          viewBox='0 0 24 24'
-          fill='none'
-          stroke='currentColor'
-          strokeWidth={1.5}
-          className='size-4 animate-bounce text-subtle-foreground'
-        >
-          <path strokeLinecap='round' strokeLinejoin='round' d='m6 9 6 6 6-6' />
-        </svg>
+        <HeroCodePanel
+          name={nameText}
+          role={roleText}
+          location={locationText}
+          stack={[...HERO_STACK]}
+          available={profile.available}
+        />
       </div>
     </section>
   )

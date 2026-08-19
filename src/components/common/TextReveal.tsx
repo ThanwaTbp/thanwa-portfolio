@@ -18,8 +18,7 @@ export interface ITextRevealProps {
   trigger?: 'mount' | 'scroll'
 }
 
-// แยกข้อความเป็น "คำ" ด้วยช่องว่าง (รองรับภาษาไทยด้วยเพราะภาษาไทยไม่มีตัวอักษรแบ่งคำชัดเจนแบบภาษาอังกฤษ)
-// แล้ว reveal ทีละคำแบบ mask — คำอยู่ใน span overflow-hidden แล้ว translateY ขึ้นจากด้านล่าง
+// แยกข้อความเป็น "คำ" ด้วยช่องว่าง แล้ว reveal ทีละคำแบบ mask — คำอยู่ใน span overflow-hidden แล้ว translateY ขึ้นจากด้านล่าง
 export function TextReveal({
   text,
   as: Tag = 'p',
