@@ -43,26 +43,4 @@ export const PROFILE: IProfile = {
       url: 'https://x.com/thanwadev',
     },
   ],
-  stats: [
-    {
-      label: 'Years of experience',
-      value: 5,
-      suffix: '+',
-    },
-    {
-      label: 'Projects shipped',
-      value: 30,
-      suffix: '+',
-    },
-    {
-      label: 'Technologies used',
-      value: 20,
-      suffix: '+',
-    },
-    {
-      label: 'Happy clients',
-      value: 15,
-      suffix: '+',
-    },
-  ],
 }

@@ -81,12 +81,6 @@ export interface ISocialLink {
   url: string
 }
 
-export interface IProfileStat {
-  label: string
-  value: number
-  suffix?: string
-}
-
 export interface IProfile {
   name: string
   headline: string
@@ -96,7 +90,6 @@ export interface IProfile {
   resumeUrl?: string
   available: boolean
   socials: ISocialLink[]
-  stats: IProfileStat[]
   /**
    * Hero section (หน้าแรก) — ปรับได้จาก admin เพื่อให้ Typewriter/stack แสดงตามที่ต้องการ
    * ทำ optional เพื่อรองรับข้อมูลเดิมที่ยังไม่เคยมีฟิลด์นี้ใน Appwrite

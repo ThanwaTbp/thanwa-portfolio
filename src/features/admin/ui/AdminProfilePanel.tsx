@@ -20,15 +20,9 @@ const SOCIAL_PLATFORMS: ISocialLink['platform'][] = [
   'website',
 ]
 
-export type ProfileSection = 'identity' | 'hero' | 'media' | 'socials' | 'stats'
+export type ProfileSection = 'identity' | 'hero' | 'media' | 'socials'
 
-export const PROFILE_SECTION_IDS: ProfileSection[] = [
-  'identity',
-  'hero',
-  'media',
-  'socials',
-  'stats',
-]
+export const PROFILE_SECTION_IDS: ProfileSection[] = ['identity', 'hero', 'media', 'socials']
 
 const PROFILE_SECTIONS: { id: ProfileSection; label: string; hint: string }[] = [
   {
@@ -43,7 +37,6 @@ const PROFILE_SECTIONS: { id: ProfileSection; label: string; hint: string }[] = 
     label: COPY.admin.profile.sections.socials,
     hint: COPY.admin.profile.hints.socials,
   },
-  { id: 'stats', label: COPY.admin.profile.sections.stats, hint: COPY.admin.profile.hints.stats },
 ]
 
 interface IAdminProfilePanelProps {
@@ -131,7 +124,6 @@ export function AdminProfilePanel({
       bio: draft.bio.trim(),
       location: draft.location.trim(),
       socials: draft.socials.filter((item) => item.label.trim() && item.url.trim()),
-      stats: draft.stats.filter((item) => item.label.trim()),
       heroIntro: draft.heroIntro?.trim() || undefined,
       heroRoles: normalizedRoles.length > 0 ? normalizedRoles : undefined,
       heroStack: normalizedStack.length > 0 ? normalizedStack : undefined,
@@ -398,112 +390,6 @@ export function AdminProfilePanel({
                   </li>
                 ))}
               </ul>
-            )}
-          </div>
-        ) : null}
-
-        {section === 'stats' ? (
-          <div className='max-w-3xl'>
-            <div className='mb-4 flex items-center justify-end'>
-              <button
-                type='button'
-                onClick={() =>
-                  setDraft((current) => ({
-                    ...current,
-                    stats: [...current.stats, { label: '', value: 0, suffix: '+' }],
-                  }))
-                }
-                className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
-              >
-                <Plus className='size-4' />
-                {COPY.admin.actions.addItem}
-              </button>
-            </div>
-
-            {draft.stats.length === 0 ? (
-              <div className='rounded-xl border border-dashed border-border/80 px-5 py-10 text-center'>
-                <p className='text-sm text-muted-foreground'>{COPY.admin.emptyList}</p>
-              </div>
-            ) : (
-              <div>
-                <div className='mb-2 hidden grid-cols-[minmax(0,1fr)_7rem_6rem_2.25rem] gap-3 px-3 sm:grid'>
-                  <FieldLabel>{COPY.admin.profile.statLabel}</FieldLabel>
-                  <FieldLabel>{COPY.admin.profile.statValue}</FieldLabel>
-                  <FieldLabel>{COPY.admin.profile.statSuffix}</FieldLabel>
-                  <span />
-                </div>
-                <ul className='space-y-2'>
-                  {draft.stats.map((stat, index) => (
-                    <li
-                      key={`stat-${index}`}
-                      className='grid gap-3 rounded-xl border border-border/60 bg-background/50 p-3 sm:grid-cols-[minmax(0,1fr)_7rem_6rem_2.25rem]'
-                    >
-                      <input
-                        value={stat.label}
-                        onChange={(event) =>
-                          setDraft((current) => ({
-                            ...current,
-                            stats: current.stats.map((item, itemIndex) =>
-                              itemIndex === index ? { ...item, label: event.target.value } : item,
-                            ),
-                          }))
-                        }
-                        placeholder={COPY.admin.profile.statLabel}
-                        aria-label={COPY.admin.profile.statLabel}
-                        className='admin-input'
-                      />
-                      <input
-                        type='number'
-                        value={stat.value}
-                        onChange={(event) =>
-                          setDraft((current) => ({
-                            ...current,
-                            stats: current.stats.map((item, itemIndex) =>
-                              itemIndex === index
-                                ? { ...item, value: Number(event.target.value) }
-                                : item,
-                            ),
-                          }))
-                        }
-                        placeholder={COPY.admin.profile.statValue}
-                        aria-label={COPY.admin.profile.statValue}
-                        className='admin-input'
-                      />
-                      <input
-                        value={stat.suffix ?? ''}
-                        onChange={(event) =>
-                          setDraft((current) => ({
-                            ...current,
-                            stats: current.stats.map((item, itemIndex) =>
-                              itemIndex === index ? { ...item, suffix: event.target.value } : item,
-                            ),
-                          }))
-                        }
-                        placeholder={COPY.admin.profile.statSuffix}
-                        aria-label={COPY.admin.profile.statSuffix}
-                        className='admin-input'
-                      />
-                      <button
-                        type='button'
-                        onClick={() => {
-                          void (async () => {
-                            const didConfirm = await confirmDelete()
-                            if (!didConfirm) return
-                            setDraft((current) => ({
-                              ...current,
-                              stats: current.stats.filter((_, itemIndex) => itemIndex !== index),
-                            }))
-                          })()
-                        }}
-                        className='inline-flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-red-500'
-                        aria-label={COPY.admin.actions.delete}
-                      >
-                        <Trash2 className='size-4' />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             )}
           </div>
         ) : null}

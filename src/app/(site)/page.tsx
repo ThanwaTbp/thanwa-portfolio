@@ -5,7 +5,6 @@ import { ExperiencePreview } from '@/features/home/ui/ExperiencePreview'
 import { FeaturedProjects } from '@/features/home/ui/FeaturedProjects'
 import { HeroSection } from '@/features/home/ui/HeroSection'
 import { SkillsPreview } from '@/features/home/ui/SkillsPreview'
-import { StatsSection } from '@/features/home/ui/StatsSection'
 import { COPY } from '@/constants/copy'
 import {
   getExperiences,
@@ -31,7 +30,6 @@ export default async function HomePage() {
     <>
       <HeroSection profile={profile} />
       <AboutSection profile={profile} />
-      <StatsSection stats={profile.stats} />
       <FeaturedProjects projects={featuredProjects} />
       <ExperiencePreview experiences={experiences} />
       <SkillsPreview skillCategories={skillCategories} />

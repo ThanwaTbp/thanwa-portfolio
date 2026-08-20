@@ -53,6 +53,7 @@ export const COPY = {
   projects: {
     title: 'Projects',
     description: "A collection of products, experiments, and case studies I've worked on.",
+    viewProject: 'View project',
     empty: {
       title: 'No projects match your filters',
       description: 'Try adjusting or clearing the filters to see more work.',
@@ -231,14 +232,12 @@ export const COPY = {
         hero: 'Hero',
         media: 'Files',
         socials: 'Links',
-        stats: 'Stats',
       },
       hints: {
         identity: 'Name, headline, and the About bio.',
         hero: 'Homepage opening: intro, typewriter roles, stack chips.',
         media: 'Portrait and resume download.',
         socials: 'Links in the header, footer, and contact areas.',
-        stats: 'Short proof numbers beside your profile.',
       },
       name: 'Name',
       headline: 'Headline',
@@ -258,10 +257,6 @@ export const COPY = {
       socialPlatform: 'Platform',
       socialLabel: 'Label',
       socialUrl: 'URL',
-      stats: 'Profile stats',
-      statLabel: 'Label',
-      statValue: 'Value',
-      statSuffix: 'Suffix',
     },
     experience: {
       listTitle: 'All experience',
