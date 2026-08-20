@@ -8,6 +8,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { SectionHeading } from '@/components/common/SectionHeading'
+import { SectionShell } from '@/components/common/SectionShell'
 import { TechIcon } from '@/components/common/TechIcon'
 import { COPY } from '@/constants/copy'
 
@@ -21,35 +22,31 @@ export function SkillsPreview({ skillCategories }: ISkillsPreviewProps) {
     .slice(0, 3)
 
   return (
-    <section id='skills' className='py-16 sm:py-20 lg:py-28'>
-      <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
-        <div className='flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end'>
-          <SectionHeading
-            title={COPY.home.skillsPreviewTitle}
-            description={COPY.home.skillsPreviewDescription}
-          />
-          <Link href='/skills' className={buttonVariants({ variant: 'outline', size: 'sm' })}>
-            {COPY.common.viewAll}
-          </Link>
-        </div>
+    <SectionShell id='skills' index={4} label={COPY.nav.skills} tone='tinted'>
+      <div className='flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end'>
+        <SectionHeading
+          title={COPY.home.skillsPreviewTitle}
+          description={COPY.home.skillsPreviewDescription}
+        />
+        <Link href='/skills' className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+          {COPY.common.viewAll}
+        </Link>
       </div>
 
       {featuredCategories.length === 0 ? (
-        <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
-          <EmptyState
-            icon={emptyStateIcon(Sparkles)}
-            title={COPY.skills.empty.title}
-            description={COPY.skills.empty.description}
-            action={
-              <Link href='/' className={buttonVariants({ variant: 'outline', size: 'sm' })}>
-                {COPY.skills.empty.action}
-              </Link>
-            }
-            className='mt-10'
-          />
-        </div>
+        <EmptyState
+          icon={emptyStateIcon(Sparkles)}
+          title={COPY.skills.empty.title}
+          description={COPY.skills.empty.description}
+          action={
+            <Link href='/' className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+              {COPY.skills.empty.action}
+            </Link>
+          }
+          className='mt-10'
+        />
       ) : (
-        <div className='mx-auto mt-10 max-w-6xl px-4 sm:px-6 lg:px-8'>
+        <div className='mt-10'>
           <RevealOnScroll stagger className='grid gap-4 lg:grid-cols-3'>
             {featuredCategories.map((skillCategory) => (
               <article
@@ -77,6 +74,6 @@ export function SkillsPreview({ skillCategories }: ISkillsPreviewProps) {
           </RevealOnScroll>
         </div>
       )}
-    </section>
+    </SectionShell>
   )
 }

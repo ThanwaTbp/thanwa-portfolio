@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/Card'
 import { Separator } from '@/components/ui/Separator'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { SectionHeading } from '@/components/common/SectionHeading'
+import { SectionShell } from '@/components/common/SectionShell'
 import { COPY } from '@/constants/copy'
 
 export interface IAboutSectionProps {
@@ -15,12 +16,12 @@ export function AboutSection({ profile }: IAboutSectionProps) {
   const emailSocial = profile.socials.find((social) => social.platform === 'email')
 
   return (
-    <section id='about' className='mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28'>
+    <SectionShell id='about' index={1} label={COPY.home.aboutTitle}>
       <RevealOnScroll>
-        <SectionHeading eyebrow={COPY.home.aboutTitle} title={COPY.home.aboutHeadline} />
+        <SectionHeading title={COPY.home.aboutHeadline} />
       </RevealOnScroll>
 
-      <RevealOnScroll delay={0.1} className='mt-10 grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:gap-12'>
+      <RevealOnScroll stagger delay={0.1} className='mt-10 grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:gap-12'>
         <div className='space-y-5'>
           <p className='text-lg leading-relaxed text-muted-foreground'>{profile.bio}</p>
         </div>
@@ -65,6 +66,6 @@ export function AboutSection({ profile }: IAboutSectionProps) {
           </CardContent>
         </Card>
       </RevealOnScroll>
-    </section>
+    </SectionShell>
   )
 }

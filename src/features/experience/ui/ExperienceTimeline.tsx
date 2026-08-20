@@ -32,7 +32,7 @@ export function ExperienceTimeline({ experiences }: IExperienceTimelineProps) {
   return (
     <RevealOnScroll
       stagger
-      className='relative flex flex-col gap-10 border-l border-border pl-8 sm:pl-12'
+      className='relative flex flex-col gap-6 border-l border-border pl-8 sm:pl-12'
     >
       {experiences.map((experience) => {
         const isCurrent = experience.endDate === null

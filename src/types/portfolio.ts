@@ -86,8 +86,6 @@ export interface IProfile {
   headline: string
   bio: string
   location: string
-  avatar?: string
-  resumeUrl?: string
   available: boolean
   socials: ISocialLink[]
   /**

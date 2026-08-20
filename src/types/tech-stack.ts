@@ -8,6 +8,7 @@ export type TechCategory =
   | 'database'
   | 'cloud'
   | 'tooling'
+  | 'ai'
   | 'design'
   | 'animation'
   | 'testing'

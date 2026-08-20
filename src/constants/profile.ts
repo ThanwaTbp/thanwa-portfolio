@@ -13,8 +13,6 @@ export const PROFILE: IProfile = {
   heroIntro: COPY.home.heroIntro,
   heroRoles: [...COPY.home.heroRoles],
   heroStack: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'],
-  avatar: undefined,
-  resumeUrl: undefined,
   available: true,
   socials: [
     {

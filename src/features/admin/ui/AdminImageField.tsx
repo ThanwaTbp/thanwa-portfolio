@@ -14,23 +14,15 @@ interface IAdminImageFieldProps {
   value?: string
   onChange: (url: string | undefined) => void
   kind?: 'image' | 'document'
-  shape?: 'wide' | 'portrait'
 }
 
-export function AdminImageField({
-  label,
-  value,
-  onChange,
-  kind = 'image',
-  shape = 'wide',
-}: IAdminImageFieldProps) {
+export function AdminImageField({ label, value, onChange, kind = 'image' }: IAdminImageFieldProps) {
   const { isUploading, errorMessage, uploadFile } = useAdminUpload()
   const { confirmDelete } = useAdminActionAlert()
   const looksLikeImage = Boolean(value && /\.(jpe?g|png|webp|gif|avif)(\?|$)/i.test(value))
   const showImagePreview = Boolean(
     value && (kind === 'image' ? !value.toLowerCase().includes('.pdf') : looksLikeImage),
   )
-  const isPortrait = shape === 'portrait'
 
   const onPickFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -45,20 +37,15 @@ export function AdminImageField({
     <div className='space-y-3'>
       <p className='text-sm font-medium text-foreground'>{label}</p>
       {value ? (
-        <div
-          className={cn(
-            'overflow-hidden border border-border/70 bg-surface-muted',
-            isPortrait ? 'aspect-square max-w-56 rounded-2xl' : 'rounded-xl',
-          )}
-        >
+        <div className='overflow-hidden rounded-xl border border-border/70 bg-surface-muted'>
           {showImagePreview ? (
             <Image
               src={value}
               alt=''
-              width={isPortrait ? 448 : 960}
-              height={isPortrait ? 448 : 384}
+              width={960}
+              height={384}
               unoptimized
-              className={cn('w-full object-cover', isPortrait ? 'h-full' : 'h-auto max-h-48')}
+              className='h-auto max-h-48 w-full object-cover'
             />
           ) : (
             <a
@@ -70,10 +57,6 @@ export function AdminImageField({
               {value}
             </a>
           )}
-        </div>
-      ) : isPortrait ? (
-        <div className='flex aspect-square max-w-56 items-center justify-center rounded-2xl border border-dashed border-border/80 bg-surface-muted/60 text-subtle-foreground'>
-          <ImagePlus className='size-7' />
         </div>
       ) : null}
       <div className='flex flex-wrap items-center gap-2'>

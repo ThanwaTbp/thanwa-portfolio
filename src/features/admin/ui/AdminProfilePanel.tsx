@@ -1,12 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { FileText, LoaderCircle, Plus, Save, Trash2 } from 'lucide-react'
+import { LoaderCircle, Plus, Save, Trash2 } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/Button'
 import TechMultiSelect from '@/components/ui/TechMultiSelect'
 import { COPY } from '@/constants/copy'
 import { useAdminActionAlert } from '@/features/admin/hooks/useAdminActionAlert'
-import { AdminImageField } from '@/features/admin/ui/AdminImageField'
 import { AdminStringListField } from '@/features/admin/ui/AdminStringListField'
 import { cn } from '@/lib/utils'
 import type { IProfile, ISocialLink } from '@/types/portfolio'
@@ -20,9 +19,9 @@ const SOCIAL_PLATFORMS: ISocialLink['platform'][] = [
   'website',
 ]
 
-export type ProfileSection = 'identity' | 'hero' | 'media' | 'socials'
+export type ProfileSection = 'identity' | 'hero' | 'socials'
 
-export const PROFILE_SECTION_IDS: ProfileSection[] = ['identity', 'hero', 'media', 'socials']
+export const PROFILE_SECTION_IDS: ProfileSection[] = ['identity', 'hero', 'socials']
 
 const PROFILE_SECTIONS: { id: ProfileSection; label: string; hint: string }[] = [
   {
@@ -31,7 +30,6 @@ const PROFILE_SECTIONS: { id: ProfileSection; label: string; hint: string }[] = 
     hint: COPY.admin.profile.hints.identity,
   },
   { id: 'hero', label: COPY.admin.profile.sections.hero, hint: COPY.admin.profile.hints.hero },
-  { id: 'media', label: COPY.admin.profile.sections.media, hint: COPY.admin.profile.hints.media },
   {
     id: 'socials',
     label: COPY.admin.profile.sections.socials,
@@ -261,29 +259,6 @@ export function AdminProfilePanel({
               selectedNames={draft.heroStack ?? []}
               onChangeSelected={(heroStack) => setDraft((current) => ({ ...current, heroStack }))}
             />
-          </div>
-        ) : null}
-
-        {section === 'media' ? (
-          <div className='grid max-w-2xl gap-10 sm:grid-cols-2'>
-            <AdminImageField
-              label={COPY.admin.profile.avatar}
-              value={draft.avatar}
-              shape='portrait'
-              onChange={(avatar) => setDraft((current) => ({ ...current, avatar }))}
-            />
-            <div>
-              <AdminImageField
-                label={COPY.admin.profile.resume}
-                value={draft.resumeUrl}
-                kind='document'
-                onChange={(resumeUrl) => setDraft((current) => ({ ...current, resumeUrl }))}
-              />
-              <p className='mt-3 inline-flex items-center gap-2 text-xs leading-5 text-muted-foreground'>
-                <FileText className='size-3.5 shrink-0' />
-                {COPY.admin.profile.resumeHint}
-              </p>
-            </div>
           </div>
         ) : null}
 

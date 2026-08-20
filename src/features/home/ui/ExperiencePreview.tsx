@@ -8,6 +8,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { SectionHeading } from '@/components/common/SectionHeading'
+import { SectionShell } from '@/components/common/SectionShell'
 import { COPY } from '@/constants/copy'
 
 export interface IExperiencePreviewProps {
@@ -20,10 +21,7 @@ export function ExperiencePreview({ experiences }: IExperiencePreviewProps) {
   const previewExperiences = experiences.slice(0, PREVIEW_COUNT)
 
   return (
-    <section
-      id='experience'
-      className='mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28'
-    >
+    <SectionShell id='experience' index={3} label={COPY.nav.experience}>
       <div className='flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end'>
         <SectionHeading title={COPY.home.latestExperienceTitle} />
         <Link href='/experience' className={buttonVariants({ variant: 'outline', size: 'sm' })}>
@@ -75,6 +73,6 @@ export function ExperiencePreview({ experiences }: IExperiencePreviewProps) {
           ))}
         </RevealOnScroll>
       )}
-    </section>
+    </SectionShell>
   )
 }

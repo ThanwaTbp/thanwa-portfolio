@@ -7,6 +7,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { SectionHeading } from '@/components/common/SectionHeading'
+import { SectionShell } from '@/components/common/SectionShell'
 import { ProjectCard } from '@/features/projects/ui/ProjectCard'
 import { COPY } from '@/constants/copy'
 
@@ -16,7 +17,7 @@ export interface IFeaturedProjectsProps {
 
 export function FeaturedProjects({ projects }: IFeaturedProjectsProps) {
   return (
-    <section id='work' className='mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28'>
+    <SectionShell id='work' index={2} label={COPY.nav.work} tone='tinted'>
       <div className='flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end'>
         <SectionHeading
           title={COPY.home.featuredTitle}
@@ -46,6 +47,6 @@ export function FeaturedProjects({ projects }: IFeaturedProjectsProps) {
           ))}
         </RevealOnScroll>
       )}
-    </section>
+    </SectionShell>
   )
 }

@@ -1,12 +1,15 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ChevronsUpDown, Search, X } from 'lucide-react'
 
 import { TechIcon } from '@/components/common/TechIcon'
 import { COPY, formatSelectedCount } from '@/constants/copy'
 import { useTechStack } from '@/hooks/useTechStack'
 import { cn } from '@/lib/utils'
+
+// ความสูงโดยประมาณของ dropdown (ช่องค้นหา + รายการ) ใช้ตัดสินว่าจะเปิดขึ้นบนหรือลงล่าง
+const PICKER_ESTIMATED_HEIGHT = 360
 
 interface ITechMultiSelectProps {
   selectedNames: string[]
@@ -20,6 +23,7 @@ export default function TechMultiSelect({
   label,
 }: ITechMultiSelectProps) {
   const panelRef = useRef<HTMLDivElement>(null)
+  const [shouldOpenUpward, setShouldOpenUpward] = useState(false)
   const {
     searchQuery,
     isPickerOpen,
@@ -33,6 +37,34 @@ export default function TechMultiSelect({
     onRemoveTech,
     isTechSelected,
   } = useTechStack({ selectedNames, onChangeSelected })
+
+  // เลือกทิศทางเปิด dropdown ตามที่ว่างจริงรอบๆ ตัว input ไม่ให้ล้นขอบจอ
+  const syncOpenDirection = useCallback(() => {
+    const anchor = panelRef.current
+    if (!anchor) return
+
+    const bounds = anchor.getBoundingClientRect()
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight
+    const spaceBelow = viewportHeight - bounds.bottom
+    const spaceAbove = bounds.top
+
+    setShouldOpenUpward(spaceBelow < PICKER_ESTIMATED_HEIGHT && spaceAbove > spaceBelow)
+  }, [])
+
+  useEffect(() => {
+    if (!isPickerOpen) return
+
+    syncOpenDirection()
+
+    // ใช้ capture เพื่อจับ scroll ของ container ด้านในด้วย เช่นตอนอยู่ใน slide over ของหน้า admin
+    window.addEventListener('scroll', syncOpenDirection, { passive: true, capture: true })
+    window.addEventListener('resize', syncOpenDirection, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', syncOpenDirection, { capture: true })
+      window.removeEventListener('resize', syncOpenDirection)
+    }
+  }, [isPickerOpen, syncOpenDirection])
 
   useEffect(() => {
     if (!isPickerOpen) return
@@ -60,14 +92,14 @@ export default function TechMultiSelect({
     <div ref={panelRef} className='relative space-y-2'>
       {label ? <p className='text-sm font-medium text-foreground'>{label}</p> : null}
 
-      <div className='rounded-2xl border border-border/80 bg-background/80 p-2.5'>
+      <div className='rounded-lg border border-border/80 bg-background/80 p-2.5'>
         <div className='flex flex-wrap items-center gap-2'>
           {selectedItems.map((techItem) => (
             <button
               key={techItem.id}
               type='button'
               onClick={() => onRemoveTech(techItem.name)}
-              className='inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-surface px-2.5 py-1 text-xs text-foreground transition-colors hover:border-border-strong'
+              className='inline-flex items-center gap-1.5 rounded-md border border-border/80 bg-surface px-2.5 py-1 text-xs text-foreground transition-colors hover:border-border-strong'
             >
               <TechIcon name={techItem.name} className='size-3.5' />
               <span>{techItem.name}</span>
@@ -79,7 +111,7 @@ export default function TechMultiSelect({
             type='button'
             onClick={onTogglePicker}
             aria-expanded={isPickerOpen}
-            className='inline-flex min-h-8 min-w-[8rem] flex-1 items-center justify-between gap-2 rounded-xl px-2 text-left text-sm text-muted-foreground transition-colors hover:text-foreground'
+            className='inline-flex min-h-8 min-w-[8rem] flex-1 items-center justify-between gap-2 rounded-md px-2 text-left text-sm text-muted-foreground transition-colors hover:text-foreground'
           >
             <span>
               {selectedCount > 0 ? formatSelectedCount(selectedCount) : COPY.techStack.placeholder}
@@ -91,10 +123,11 @@ export default function TechMultiSelect({
 
       <div
         className={cn(
-          'absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-[0_18px_50px_-32px_rgba(38,40,66,0.55)] transition-[transform,opacity] duration-200 ease-out',
-          isPickerOpen
-            ? 'translate-y-0 opacity-100'
-            : 'pointer-events-none invisible -translate-y-1 opacity-0',
+          'absolute inset-x-0 z-20 overflow-hidden rounded-lg border border-border/80 bg-surface shadow-[0_18px_50px_-32px_rgba(38,40,66,0.55)] transition-[transform,opacity] duration-200 ease-out',
+          shouldOpenUpward ? 'bottom-full mb-2' : 'top-full mt-2',
+          isPickerOpen && 'translate-y-0 opacity-100',
+          !isPickerOpen && 'pointer-events-none invisible opacity-0',
+          !isPickerOpen && (shouldOpenUpward ? 'translate-y-1' : '-translate-y-1'),
         )}
       >
         <label className='flex items-center gap-2 border-b border-border/70 px-3 py-2.5'>
@@ -128,7 +161,7 @@ export default function TechMultiSelect({
                         type='button'
                         onClick={() => onToggleTech(techItem.name)}
                         className={cn(
-                          'flex items-center gap-2 rounded-xl px-2.5 py-2 text-left text-sm transition-colors',
+                          'flex items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm transition-colors',
                           selected
                             ? 'bg-accent/10 text-foreground'
                             : 'text-muted-foreground hover:bg-surface-muted hover:text-foreground',

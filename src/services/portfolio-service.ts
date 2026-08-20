@@ -8,6 +8,7 @@ import type {
 } from '@/types/portfolio'
 import type { IPortfolioData } from '@/types/portfolio-data'
 import { loadPortfolioData } from '@/services/portfolio-store-service'
+import { sortExperiencesByRecency } from '@/utils/experience'
 
 export interface IGetProjectsOptions {
   category?: ProjectCategory
@@ -110,9 +111,7 @@ export async function getProjectTechStack(): Promise<string[]> {
 
 export async function getExperiences(): Promise<IExperience[]> {
   const data = await getData()
-  return [...data.experiences].sort((firstExperience, secondExperience) =>
-    secondExperience.startDate.localeCompare(firstExperience.startDate),
-  )
+  return sortExperiencesByRecency(data.experiences)
 }
 
 export async function getEducations(): Promise<IEducation[]> {

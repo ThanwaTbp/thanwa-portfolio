@@ -10,6 +10,7 @@ import { AdminSlideOver } from '@/features/admin/ui/AdminSlideOver'
 import { AdminStringListField } from '@/features/admin/ui/AdminStringListField'
 import { createEntityId } from '@/features/admin/utils'
 import type { EmploymentType, IExperience } from '@/types/portfolio'
+import { sortExperiencesByRecency } from '@/utils/experience'
 
 interface IExperienceDraft {
   id: string
@@ -120,6 +121,8 @@ export function AdminExperiencePanel({
     }
   }
 
+  const sortedExperiences = sortExperiencesByRecency(experiences)
+
   return (
     <div className='space-y-6'>
       <header className='flex items-center justify-between'>
@@ -145,7 +148,7 @@ export function AdminExperiencePanel({
         <p className='py-12 text-center text-sm text-muted-foreground'>{COPY.admin.emptyList}</p>
       ) : (
         <div className='space-y-3'>
-          {experiences.map((exp) => (
+          {sortedExperiences.map((exp) => (
             <article
               key={exp.id}
               className='flex items-center justify-between gap-4 rounded-xl border border-border/60 bg-surface/60 px-5 py-4'
