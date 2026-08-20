@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
+import BrandLogo from '@/components/common/BrandLogo'
 import ThemeToggle from '@/components/common/ThemeToggle'
 import AuthNavActions from '@/components/auth/AuthNavActions'
 import { COPY } from '@/constants/copy'
@@ -83,12 +84,9 @@ export default function SiteHeader() {
       <div className='mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8'>
         <Link
           href='/'
-          className='inline-flex items-center gap-3 text-base font-semibold tracking-tight text-foreground'
+          className='inline-flex items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background'
         >
-          <span className='inline-flex size-8 items-center justify-center rounded-full border border-accent/25 bg-accent/10 text-sm text-accent'>
-            T
-          </span>
-          <span>{COPY.common.siteName}</span>
+          <BrandLogo markClassName='size-8' />
         </Link>
 
         <nav className='hidden items-center gap-1 md:flex' aria-label={COPY.nav.menu}>

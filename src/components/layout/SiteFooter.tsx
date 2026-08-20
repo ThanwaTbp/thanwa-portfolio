@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import { ArrowUpRight, Mail } from 'lucide-react'
 import Link from 'next/link'
 
+import BrandLogo from '@/components/common/BrandLogo'
 import FooterAdminAction from '@/components/layout/FooterAdminAction'
 import { COPY } from '@/constants/copy'
 import { getProfile } from '@/services/portfolio-service'
@@ -58,12 +59,13 @@ export default async function SiteFooter() {
           <div className='max-w-md space-y-4'>
             <Link
               href='/'
-              className='inline-flex items-center gap-3 text-lg font-semibold tracking-tight text-foreground'
+              className='inline-flex items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-surface-muted'
             >
-              <span className='inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-accent/25 bg-accent/10 text-sm text-accent'>
-                T
-              </span>
-              {COPY.common.siteName}
+              <BrandLogo
+                idPrefix='brand-logo-footer'
+                markClassName='size-9'
+                wordmarkClassName='text-lg'
+              />
             </Link>
             <p className='text-sm leading-7 text-muted-foreground'>{COPY.common.tagline}</p>
             {profile.available ? (

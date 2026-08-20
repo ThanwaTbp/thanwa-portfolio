@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 40" width="176" height="40" role="img" aria-label="Thanwa">
+  <defs>
+    <linearGradient id="thanwaLogoGradient" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#794CF3"/>
+      <stop offset="1" stop-color="#1EBDE3"/>
+    </linearGradient>
+    <clipPath id="thanwaLogoClip">
+      <path d="M20 0.05C22.61 0.05 25.28 0.02 28.08 0.5C30.87 0.98 33.76 2.09 35.83 4.17C37.91 6.24 39.02 9.13 39.5 11.92C39.98 14.72 39.95 17.39 39.95 20C39.95 22.61 39.98 25.28 39.5 28.08C39.02 30.87 37.91 33.76 35.83 35.83C33.76 37.91 30.87 39.02 28.08 39.5C25.28 39.98 22.61 39.95 20 39.95C17.39 39.95 14.72 39.98 11.92 39.5C9.13 39.02 6.24 37.91 4.17 35.83C2.09 33.76 0.98 30.87 0.5 28.08C0.02 25.28 0.05 22.61 0.05 20C0.05 17.39 0.02 14.72 0.5 11.92C0.98 9.13 2.09 6.24 4.17 4.17C6.24 2.09 9.13 0.98 11.92 0.5C14.72 0.02 17.39 0.05 20 0.05Z"/>
+    </clipPath>
+  </defs>
+  <path d="M20 0.05C22.61 0.05 25.28 0.02 28.08 0.5C30.87 0.98 33.76 2.09 35.83 4.17C37.91 6.24 39.02 9.13 39.5 11.92C39.98 14.72 39.95 17.39 39.95 20C39.95 22.61 39.98 25.28 39.5 28.08C39.02 30.87 37.91 33.76 35.83 35.83C33.76 37.91 30.87 39.02 28.08 39.5C25.28 39.98 22.61 39.95 20 39.95C17.39 39.95 14.72 39.98 11.92 39.5C9.13 39.02 6.24 37.91 4.17 35.83C2.09 33.76 0.98 30.87 0.5 28.08C0.02 25.28 0.05 22.61 0.05 20C0.05 17.39 0.02 14.72 0.5 11.92C0.98 9.13 2.09 6.24 4.17 4.17C6.24 2.09 9.13 0.98 11.92 0.5C14.72 0.02 17.39 0.05 20 0.05Z" fill="url(#thanwaLogoGradient)"/>
+  <g clip-path="url(#thanwaLogoClip)">
+    <path d="M-14 -10H40V15L-14 40Z" fill="#FFFFFF" fill-opacity="0.16"/>
+  </g>
+  <g fill="#FFFFFF">
+    <rect x="9" y="10" width="22" height="5" rx="2.5"/>
+    <rect x="17.5" y="10" width="5" height="20" rx="2.5"/>
+    <circle cx="27.6" cy="26.9" r="2.6" fill-opacity="0.7"/>
+  </g>
+  <text x="52" y="26.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19" font-weight="600" letter-spacing="-0.5" fill="#231E50">Thanwa<tspan fill="#794CF3">.</tspan></text>
+</svg>
