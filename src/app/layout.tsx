@@ -5,8 +5,7 @@ import './globals.css'
 import ThemeProvider from '@/components/common/ThemeProvider'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import LoginModal from '@/components/auth/LoginModal'
-import SiteHeader from '@/components/layout/SiteHeader'
-import SiteFooter from '@/components/layout/SiteFooter'
+import LoadingIndicator from '@/components/common/LoadingIndicator'
 import { COPY } from '@/constants/copy'
 
 const baiJamjuree = Bai_Jamjuree({
@@ -57,9 +56,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body className='flex min-h-dvh flex-col font-sans text-foreground'>
         <ThemeProvider>
           <AuthProvider>
-            <SiteHeader />
-            <main>{children}</main>
-            <SiteFooter />
+            <LoadingIndicator />
+            {children}
             <LoginModal />
           </AuthProvider>
         </ThemeProvider>

@@ -97,4 +97,11 @@ export interface IProfile {
   available: boolean
   socials: ISocialLink[]
   stats: IProfileStat[]
+  /**
+   * Hero section (หน้าแรก) — ปรับได้จาก admin เพื่อให้ Typewriter/stack แสดงตามที่ต้องการ
+   * ทำ optional เพื่อรองรับข้อมูลเดิมที่ยังไม่เคยมีฟิลด์นี้ใน Appwrite
+   */
+  heroIntro?: string
+  heroRoles?: string[]
+  heroStack?: string[]
 }

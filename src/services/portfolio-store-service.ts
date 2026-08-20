@@ -44,23 +44,24 @@ async function readAppwritePortfolioData(): Promise<IPortfolioData | null> {
 
   if (!config) return null
 
-  const databases = createAppwriteDatabases()
-  const response = await databases.listDocuments({
-    databaseId: config.databaseId,
-    collectionId: config.collectionId,
-    queries: [Query.equal('key', PORTFOLIO_DOCUMENT_KEY), Query.limit(1)],
-  })
-
-  const document = response.documents[0]
-
-  if (!document || typeof document.payload !== 'string') {
-    return null
-  }
-
   try {
+    const databases = createAppwriteDatabases()
+    const response = await databases.listDocuments({
+      databaseId: config.databaseId,
+      collectionId: config.collectionId,
+      queries: [Query.equal('key', PORTFOLIO_DOCUMENT_KEY), Query.limit(1)],
+    })
+
+    const document = response.documents[0]
+
+    if (!document || typeof document.payload !== 'string') {
+      return null
+    }
+
     const parsed = JSON.parse(document.payload) as unknown
     return isValidPortfolioData(parsed) ? parsed : null
-  } catch {
+  } catch (error) {
+    console.error('Failed to read portfolio data from Appwrite', error)
     return null
   }
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 
-import { ScrollProgress } from '@/components/common/ScrollProgress'
 import { AboutSection } from '@/features/home/ui/AboutSection'
 import { ExperiencePreview } from '@/features/home/ui/ExperiencePreview'
 import { FeaturedProjects } from '@/features/home/ui/FeaturedProjects'
@@ -30,7 +29,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <ScrollProgress />
       <HeroSection profile={profile} />
       <AboutSection profile={profile} />
       <StatsSection stats={profile.stats} />

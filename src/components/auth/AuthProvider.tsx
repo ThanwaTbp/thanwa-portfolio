@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 interface IAuthSessionResponse {
   authenticated: boolean
@@ -55,16 +55,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  const didFetchRef = useRef(false)
+
   useEffect(() => {
-    let isActive = true
+    if (didFetchRef.current) return
+    didFetchRef.current = true
 
     fetchSession()
       .then((nextSession) => {
-        if (!isActive) return
         setSession(nextSession)
       })
       .catch(() => {
-        if (!isActive) return
         setSession({
           authenticated: false,
           email: null,
@@ -73,12 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })
       })
       .finally(() => {
-        if (isActive) setIsLoading(false)
+        setIsLoading(false)
       })
-
-    return () => {
-      isActive = false
-    }
   }, [])
 
   const openLogin = useCallback(() => setIsLoginOpen(true), [])

@@ -41,7 +41,7 @@ export default function LoginModal() {
       setPassword('')
       await refreshSession()
       closeLogin()
-      router.push('/admin')
+      router.push('/admin/projects')
     } catch {
       setErrorMessage(COPY.auth.networkError)
     } finally {

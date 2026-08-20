@@ -1,3 +1,4 @@
+import { COPY } from '@/constants/copy'
 import type { IProfile } from '@/types/portfolio'
 
 /**
@@ -9,6 +10,9 @@ export const PROFILE: IProfile = {
   headline: 'Frontend Engineer',
   bio: 'I build frontends that feel intentional, fast, and genuinely pleasant to use. My focus sits at the intersection of interface design, interaction detail, and production-ready engineering with React, Next.js, Vue, and motion systems. Some profile content is still being refreshed from my previous CV site and will be updated with final details soon.',
   location: 'Bangkok, Thailand',
+  heroIntro: COPY.home.heroIntro,
+  heroRoles: [...COPY.home.heroRoles],
+  heroStack: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'],
   avatar: undefined,
   resumeUrl: undefined,
   available: true,

@@ -3,6 +3,7 @@
 import { FolderOpen } from 'lucide-react'
 
 import { EmptyState } from '@/components/common/EmptyState'
+import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { COPY } from '@/constants/copy'
 import type { IProject } from '@/types/portfolio'
@@ -17,7 +18,7 @@ export function ProjectGrid({ projects }: IProjectGridProps) {
   if (projects.length === 0) {
     return (
       <EmptyState
-        icon={FolderOpen}
+        icon={emptyStateIcon(FolderOpen)}
         title={COPY.projects.empty.title}
         description={COPY.projects.empty.description}
       />

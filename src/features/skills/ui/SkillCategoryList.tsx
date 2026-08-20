@@ -1,6 +1,7 @@
 import { Sparkles } from 'lucide-react'
 
 import { EmptyState } from '@/components/common/EmptyState'
+import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { Button } from '@/components/ui/Button'
 import { COPY, formatYearsOfExperience } from '@/constants/copy'
@@ -18,7 +19,7 @@ export function SkillCategoryList({ skillCategories }: ISkillCategoryListProps) 
   if (categoriesWithSkills.length === 0) {
     return (
       <EmptyState
-        icon={Sparkles}
+        icon={emptyStateIcon(Sparkles)}
         title={COPY.skills.empty.title}
         description={COPY.skills.empty.description}
         action={<Button href='/'>{COPY.skills.empty.action}</Button>}

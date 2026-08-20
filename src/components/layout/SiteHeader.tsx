@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 import ThemeToggle from '@/components/common/ThemeToggle'
@@ -11,23 +11,28 @@ import AuthNavActions from '@/components/auth/AuthNavActions'
 import { COPY } from '@/constants/copy'
 
 interface INavItem {
-  target: string
+  href: string
   label: string
+}
+
+const navItems: INavItem[] = [
+  { href: '/', label: COPY.nav.about },
+  { href: '/projects', label: COPY.nav.work },
+  { href: '/experience', label: COPY.nav.experience },
+  { href: '/education', label: COPY.nav.education },
+  { href: '/skills', label: COPY.nav.skills },
+]
+
+function isNavItemActive(pathname: string, href: string) {
+  if (href === '/') return pathname === '/'
+  return pathname === href || pathname.startsWith(`${href}/`)
 }
 
 export default function SiteHeader() {
   const pathname = usePathname()
-  const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const scrollFrameRef = useRef<number | null>(null)
-
-  const navItems: INavItem[] = [
-    { target: 'about', label: COPY.nav.about },
-    { target: 'work', label: COPY.nav.work },
-    { target: 'experience', label: COPY.nav.experience },
-    { target: 'skills', label: COPY.nav.skills },
-  ]
 
   useEffect(() => {
     const onScroll = () => {
@@ -66,35 +71,6 @@ export default function SiteHeader() {
   const onToggleMenu = () => setIsMenuOpen((previousState) => !previousState)
   const onCloseMenu = () => setIsMenuOpen(false)
 
-  const onScrollToSection = (target: string) => {
-    const targetElement = document.getElementById(target)
-    if (!targetElement) return
-    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const onNavigateSection = (target: string) => {
-    if (pathname === '/') {
-      onScrollToSection(target)
-      return
-    }
-
-    sessionStorage.setItem('pending-section-target', target)
-    router.push('/')
-  }
-
-  useEffect(() => {
-    if (pathname !== '/') return
-
-    const pendingTarget = sessionStorage.getItem('pending-section-target')
-
-    if (!pendingTarget) return
-
-    sessionStorage.removeItem('pending-section-target')
-    requestAnimationFrame(() => {
-      onScrollToSection(pendingTarget)
-    })
-  }, [pathname])
-
   return (
     <header
       className={cn(
@@ -104,7 +80,7 @@ export default function SiteHeader() {
           : 'border-border/80 bg-background/88 shadow-[0_8px_30px_-24px_rgba(35,30,80,0.38)]',
       )}
     >
-      <div className='mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8'>
+      <div className='mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8'>
         <Link
           href='/'
           className='inline-flex items-center gap-3 text-base font-semibold tracking-tight text-foreground'
@@ -116,16 +92,25 @@ export default function SiteHeader() {
         </Link>
 
         <nav className='hidden items-center gap-1 md:flex' aria-label={COPY.nav.menu}>
-          {navItems.map((navItem) => (
-            <button
-              key={navItem.target}
-              type='button'
-              onClick={() => onNavigateSection(navItem.target)}
-              className='rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground'
-            >
-              {navItem.label}
-            </button>
-          ))}
+          {navItems.map((navItem) => {
+            const isActive = isNavItemActive(pathname, navItem.href)
+
+            return (
+              <Link
+                key={navItem.href}
+                href={navItem.href}
+                aria-current={isActive ? 'page' : undefined}
+                className={cn(
+                  'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-accent text-accent-foreground'
+                    : 'text-muted-foreground hover:bg-surface hover:text-foreground',
+                )}
+              >
+                {navItem.label}
+              </Link>
+            )
+          })}
         </nav>
 
         <div className='flex items-center gap-2'>
@@ -156,19 +141,26 @@ export default function SiteHeader() {
         )}
       >
         <nav className='flex flex-col gap-1' aria-label={COPY.nav.menu}>
-          {navItems.map((navItem) => (
-            <button
-              key={navItem.target}
-              type='button'
-              onClick={() => {
-                onCloseMenu()
-                onNavigateSection(navItem.target)
-              }}
-              className='rounded-xl px-4 py-3 text-left text-lg font-medium text-muted-foreground transition-colors hover:bg-surface-muted hover:text-foreground'
-            >
-              {navItem.label}
-            </button>
-          ))}
+          {navItems.map((navItem) => {
+            const isActive = isNavItemActive(pathname, navItem.href)
+
+            return (
+              <Link
+                key={navItem.href}
+                href={navItem.href}
+                onClick={onCloseMenu}
+                aria-current={isActive ? 'page' : undefined}
+                className={cn(
+                  'rounded-xl px-4 py-3 text-lg font-medium transition-colors',
+                  isActive
+                    ? 'bg-accent text-accent-foreground'
+                    : 'text-muted-foreground hover:bg-surface-muted hover:text-foreground',
+                )}
+              >
+                {navItem.label}
+              </Link>
+            )
+          })}
         </nav>
 
         <AuthNavActions className='w-full justify-center' />

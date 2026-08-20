@@ -19,7 +19,7 @@ export function EducationItem({
   const hasActivities = Boolean(education.activities && education.activities.length > 0)
 
   return (
-    <div className='relative'>
+    <div className='relative transition-transform duration-300 ease-out hover:translate-x-1'>
       <span className='absolute top-6 -left-12 flex size-8 items-center justify-center rounded-full border border-border bg-surface text-accent sm:-left-16'>
         <GraduationCap className='size-4' aria-hidden='true' />
       </span>
@@ -42,9 +42,7 @@ export function EducationItem({
           )}
 
           {education.description && (
-            <p className='text-sm text-muted-foreground'>
-              {education.description}
-            </p>
+            <p className='text-sm text-muted-foreground'>{education.description}</p>
           )}
 
           {hasActivities && (

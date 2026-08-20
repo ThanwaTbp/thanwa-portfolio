@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from 'node-appwrite'
+import { Client, Databases, ID, Permission, Query, Role, Storage } from 'node-appwrite'
 
 export interface IAppwriteServerConfig {
   endpoint: string
@@ -6,6 +6,7 @@ export interface IAppwriteServerConfig {
   apiKey: string
   databaseId: string
   collectionId: string
+  bucketId?: string
 }
 
 export function getAppwriteServerConfig(): IAppwriteServerConfig | null {
@@ -14,6 +15,7 @@ export function getAppwriteServerConfig(): IAppwriteServerConfig | null {
   const apiKey = process.env.APPWRITE_API_KEY
   const databaseId = process.env.APPWRITE_DATABASE_ID
   const collectionId = process.env.APPWRITE_COLLECTION_ID
+  const bucketId = process.env.APPWRITE_BUCKET_ID
 
   if (!endpoint || !projectId || !apiKey || !databaseId || !collectionId) {
     return null
@@ -25,11 +27,17 @@ export function getAppwriteServerConfig(): IAppwriteServerConfig | null {
     apiKey,
     databaseId,
     collectionId,
+    bucketId: bucketId || undefined,
   }
 }
 
 export function isAppwriteStoreReady() {
   return getAppwriteServerConfig() !== null
+}
+
+export function isAppwriteStorageReady() {
+  const config = getAppwriteServerConfig()
+  return Boolean(config?.bucketId)
 }
 
 function createAppwriteServerClient() {
@@ -49,4 +57,19 @@ export function createAppwriteDatabases() {
   return new Databases(createAppwriteServerClient())
 }
 
-export { ID, Query }
+export function createAppwriteStorage() {
+  return new Storage(createAppwriteServerClient())
+}
+
+export function getAppwriteFileViewUrl(fileId: string) {
+  const config = getAppwriteServerConfig()
+
+  if (!config?.bucketId) {
+    throw new Error('Appwrite storage bucket is not configured')
+  }
+
+  const endpoint = config.endpoint.replace(/\/$/, '')
+  return `${endpoint}/storage/buckets/${config.bucketId}/files/${fileId}/view?project=${config.projectId}`
+}
+
+export { ID, Permission, Query, Role }

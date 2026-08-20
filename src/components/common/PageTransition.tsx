@@ -31,8 +31,16 @@ export function PageTransition({ children, className }: IPageTransitionProps) {
 
       gsap.fromTo(
         containerRef.current,
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASE.out },
+        { opacity: 0, y: 12, willChange: 'transform, opacity' },
+        {
+          opacity: 1,
+          y: 0,
+          duration: ANIMATION_DURATION.fast,
+          ease: ANIMATION_EASE.out,
+          onComplete: () => {
+            gsap.set(containerRef.current, { willChange: 'auto' })
+          },
+        },
       )
     },
     { scope: containerRef, dependencies: [pathname, reducedMotion] },

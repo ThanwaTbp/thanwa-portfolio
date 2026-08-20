@@ -11,7 +11,7 @@ function revalidatePortfolioPages() {
   revalidatePath('/experience')
   revalidatePath('/education')
   revalidatePath('/skills')
-  revalidatePath('/admin')
+  revalidatePath('/admin', 'layout')
 }
 
 export async function GET() {

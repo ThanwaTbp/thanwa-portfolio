@@ -1,3 +1,6 @@
+'use client'
+
+import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { cn } from '@/lib/utils'
 
 export interface ISectionHeadingProps {
@@ -19,7 +22,7 @@ export function SectionHeading({
   className,
 }: ISectionHeadingProps) {
   return (
-    <div
+    <RevealOnScroll
       className={cn(
         'flex flex-col gap-3',
         align === 'center' ? 'items-center text-center' : 'items-start text-left',
@@ -27,7 +30,7 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <span className='inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent'>
+        <span className='inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-accent uppercase'>
           <span className='size-1.5 rounded-full bg-accent' aria-hidden='true' />
           {eyebrow}
         </span>
@@ -45,6 +48,6 @@ export function SectionHeading({
           {description}
         </p>
       )}
-    </div>
+    </RevealOnScroll>
   )
 }

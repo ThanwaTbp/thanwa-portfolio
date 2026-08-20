@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/Badge'
 import { buttonVariants } from '@/components/ui/Button'
 import { GridPattern } from '@/components/common/GridPattern'
 import { MagneticButton } from '@/components/common/MagneticButton'
+import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { TechIcon } from '@/components/common/TechIcon'
 import { TypewriterText } from '@/components/common/TypewriterText'
 import { HeroCodePanel } from '@/features/home/ui/HeroCodePanel'
@@ -62,13 +63,15 @@ const SOCIAL_ICON_MAP: Record<ISocialLink['platform'], ComponentType<ISocialIcon
   website: Globe,
 }
 
-const HERO_STACK = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'] as const
+const HERO_STACK_DEFAULT = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'] as const
 
 export function HeroSection({ profile }: IHeroSectionProps) {
   const nameText = profile.name
   const roleText = profile.headline
   const locationText = profile.location
-  const heroRoles = [...COPY.home.heroRoles]
+  const heroIntro = profile.heroIntro ?? COPY.home.heroIntro
+  const heroRoles = profile.heroRoles?.length ? profile.heroRoles : [...COPY.home.heroRoles]
+  const heroStack = profile.heroStack?.length ? profile.heroStack : HERO_STACK_DEFAULT
 
   return (
     <section
@@ -88,15 +91,17 @@ export function HeroSection({ profile }: IHeroSectionProps) {
       <div className='relative z-10 mx-auto grid min-h-[calc(100dvh-4rem)] max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-24'>
         <div className='flex flex-col items-start gap-6'>
           <Badge variant={profile.available ? 'accent' : 'muted'} size='md' className='gap-2'>
-            <span
-              className={cn(
-                'size-2 rounded-full',
-                profile.available
-                  ? 'bg-emerald-500 shadow-[0_0_0_5px_rgba(16,185,129,0.14)]'
-                  : 'bg-subtle-foreground',
-              )}
-              aria-hidden='true'
-            />
+            <span className='relative flex size-2' aria-hidden='true'>
+              {profile.available ? (
+                <span className='absolute inset-0 rounded-full bg-emerald-500 opacity-60 motion-safe:animate-ping' />
+              ) : null}
+              <span
+                className={cn(
+                  'relative size-2 rounded-full',
+                  profile.available ? 'bg-emerald-500' : 'bg-subtle-foreground',
+                )}
+              />
+            </span>
             {profile.available ? COPY.common.availableForWork : COPY.common.notAvailable}
           </Badge>
 
@@ -114,7 +119,7 @@ export function HeroSection({ profile }: IHeroSectionProps) {
             </p>
 
             <p className='max-w-xl text-base leading-7 text-muted-foreground sm:text-lg'>
-              {COPY.home.heroIntro}
+              {heroIntro}
             </p>
           </div>
 
@@ -126,10 +131,10 @@ export function HeroSection({ profile }: IHeroSectionProps) {
           </MagneticButton>
 
           <div className='flex flex-wrap gap-2 pt-1'>
-            {HERO_STACK.map((tech) => (
+            {heroStack.map((tech) => (
               <span
                 key={tech}
-                className='inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/88 px-3 py-1.5 text-sm text-foreground shadow-sm shadow-black/5'
+                className='inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/88 px-3 py-1.5 text-sm text-foreground shadow-sm shadow-black/5 transition-transform duration-300 ease-out hover:-translate-y-0.5'
               >
                 <TechIcon name={tech} />
                 {tech}
@@ -148,7 +153,7 @@ export function HeroSection({ profile }: IHeroSectionProps) {
                   target={social.platform === 'email' ? undefined : '_blank'}
                   rel={social.platform === 'email' ? undefined : 'noopener noreferrer'}
                   aria-label={social.label}
-                  className='inline-flex size-10 items-center justify-center rounded-full border border-border/75 text-muted-foreground transition-colors hover:border-accent/30 hover:text-foreground'
+                  className='inline-flex size-10 items-center justify-center rounded-full border border-border/75 text-muted-foreground transition-[color,border-color,transform] duration-300 ease-out hover:-translate-y-0.5 hover:border-accent/30 hover:text-foreground'
                 >
                   <SocialIcon className='size-4' />
                 </a>
@@ -157,13 +162,15 @@ export function HeroSection({ profile }: IHeroSectionProps) {
           </div>
         </div>
 
-        <HeroCodePanel
-          name={nameText}
-          role={roleText}
-          location={locationText}
-          stack={[...HERO_STACK]}
-          available={profile.available}
-        />
+        <RevealOnScroll delay={0.1} className='w-full'>
+          <HeroCodePanel
+            name={nameText}
+            role={roleText}
+            location={locationText}
+            stack={[...heroStack]}
+            available={profile.available}
+          />
+        </RevealOnScroll>
       </div>
     </section>
   )

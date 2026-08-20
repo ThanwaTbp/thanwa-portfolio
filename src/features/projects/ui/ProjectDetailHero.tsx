@@ -66,9 +66,7 @@ export function ProjectDetailHero({ project, categoryLabel }: IProjectDetailHero
         className='text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl'
       />
 
-      <p className='max-w-2xl text-lg text-muted-foreground'>
-        {project.summary}
-      </p>
+      <p className='max-w-2xl text-lg text-muted-foreground'>{project.summary}</p>
 
       <div className='relative aspect-[21/9] w-full overflow-hidden rounded-2xl'>
         <div ref={parallaxRef} className='absolute inset-x-0 -top-[30px] h-[calc(100%+60px)]'>

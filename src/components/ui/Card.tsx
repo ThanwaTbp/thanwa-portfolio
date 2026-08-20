@@ -8,7 +8,7 @@ export function Card({ className, ...props }: ICardProps) {
   return (
     <div
       className={cn(
-        'bg-surface border border-border rounded-xl transition-colors duration-200 hover:border-border-strong',
+        'bg-surface border-border rounded-xl border transition-colors duration-200 hover:border-border-strong',
         className,
       )}
       {...props}

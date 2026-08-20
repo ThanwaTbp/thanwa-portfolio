@@ -1,6 +1,7 @@
 import { Briefcase } from 'lucide-react'
 
 import { EmptyState } from '@/components/common/EmptyState'
+import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { Button } from '@/components/ui/Button'
 import { COPY } from '@/constants/copy'
@@ -17,7 +18,7 @@ export function ExperienceTimeline({ experiences }: IExperienceTimelineProps) {
   if (experiences.length === 0) {
     return (
       <EmptyState
-        icon={Briefcase}
+        icon={emptyStateIcon(Briefcase)}
         title={COPY.experience.empty.title}
         description={COPY.experience.empty.description}
         action={<Button href='/'>{COPY.experience.empty.action}</Button>}

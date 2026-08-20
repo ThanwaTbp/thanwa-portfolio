@@ -27,7 +27,7 @@ export function ExperienceItem({
   const hasTechStack = experience.techStack.length > 0
 
   return (
-    <div className='relative'>
+    <div className='relative transition-transform duration-300 ease-out hover:translate-x-1'>
       <span
         className={cn(
           'absolute top-1.5 -left-10 flex size-4 items-center justify-center rounded-full ring-4 ring-background sm:-left-14',
@@ -44,9 +44,7 @@ export function ExperienceItem({
 
       <div className='flex flex-col gap-3'>
         <div className='flex flex-wrap items-center gap-x-3 gap-y-1'>
-          <h3 className='text-lg font-semibold text-foreground'>
-            {experience.position}
-          </h3>
+          <h3 className='text-lg font-semibold text-foreground'>{experience.position}</h3>
           <Badge variant='accent'>{employmentTypeLabel}</Badge>
         </div>
 
@@ -76,9 +74,7 @@ export function ExperienceItem({
           </span>
         </div>
 
-        <p className='text-sm text-muted-foreground'>
-          {experience.description}
-        </p>
+        <p className='text-sm text-muted-foreground'>{experience.description}</p>
 
         {hasAchievements && (
           <div className='flex flex-col gap-2'>

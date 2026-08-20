@@ -1,7 +1,6 @@
 'use client'
 
 import { useGSAP } from '@gsap/react'
-import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useRef } from 'react'
 
@@ -10,7 +9,7 @@ import { ANIMATION_DURATION, ANIMATION_EASE, gsap } from '@/lib/animation'
 import { cn } from '@/lib/utils'
 
 export interface IEmptyStateProps {
-  icon?: LucideIcon
+  icon?: ReactNode
   title: string
   description: string
   action?: ReactNode
@@ -18,13 +17,7 @@ export interface IEmptyStateProps {
 }
 
 // สถานะว่างสำหรับทุกหน้าที่มีลิสต์ในโปรเจกต์ ออกแบบให้ดูตั้งใจ ไม่ใช่หน้าเสีย
-export function EmptyState({
-  icon: Icon,
-  title,
-  description,
-  action,
-  className,
-}: IEmptyStateProps) {
+export function EmptyState({ icon, title, description, action, className }: IEmptyStateProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
 
@@ -58,11 +51,11 @@ export function EmptyState({
         className,
       )}
     >
-      {Icon && (
+      {icon ? (
         <div className='flex size-16 items-center justify-center rounded-full bg-surface-muted ring-8 ring-surface-muted/40'>
-          <Icon className='size-7 text-muted-foreground' aria-hidden='true' />
+          {icon}
         </div>
-      )}
+      ) : null}
       <div className='flex flex-col gap-1.5'>
         <h3 className='text-lg font-semibold text-foreground'>{title}</h3>
         <p className='max-w-sm text-sm text-muted-foreground'>{description}</p>

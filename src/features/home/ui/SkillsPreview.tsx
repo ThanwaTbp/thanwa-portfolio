@@ -5,6 +5,7 @@ import type { ISkillCategory } from '@/types/portfolio'
 import { Badge } from '@/components/ui/Badge'
 import { buttonVariants } from '@/components/ui/Button'
 import { EmptyState } from '@/components/common/EmptyState'
+import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { TechIcon } from '@/components/common/TechIcon'
@@ -36,7 +37,7 @@ export function SkillsPreview({ skillCategories }: ISkillsPreviewProps) {
       {featuredCategories.length === 0 ? (
         <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
           <EmptyState
-            icon={Sparkles}
+            icon={emptyStateIcon(Sparkles)}
             title={COPY.skills.empty.title}
             description={COPY.skills.empty.description}
             action={

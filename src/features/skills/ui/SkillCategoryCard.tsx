@@ -20,7 +20,7 @@ export function SkillCategoryCard({
     .join(' · ')
 
   return (
-    <Card className='overflow-hidden border-border/75 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--color-surface)_96%,transparent),color-mix(in_oklab,var(--color-surface-muted)_90%,transparent))]'>
+    <Card className='overflow-hidden border-border/75 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--color-surface)_96%,transparent),color-mix(in_oklab,var(--color-surface-muted)_90%,transparent))] transition-transform duration-300 ease-out hover:-translate-y-1'>
       <CardHeader>
         <p className='text-xs font-semibold uppercase tracking-[0.22em] text-accent'>
           {highlightedSkills}

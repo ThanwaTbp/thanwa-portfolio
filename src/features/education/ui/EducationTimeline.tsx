@@ -1,6 +1,7 @@
 import { GraduationCap } from 'lucide-react'
 
 import { EmptyState } from '@/components/common/EmptyState'
+import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { Button } from '@/components/ui/Button'
 import { COPY } from '@/constants/copy'
@@ -17,7 +18,7 @@ export function EducationTimeline({ educations }: IEducationTimelineProps) {
   if (educations.length === 0) {
     return (
       <EmptyState
-        icon={GraduationCap}
+        icon={emptyStateIcon(GraduationCap)}
         title={COPY.education.empty.title}
         description={COPY.education.empty.description}
         action={<Button href='/'>{COPY.education.empty.action}</Button>}

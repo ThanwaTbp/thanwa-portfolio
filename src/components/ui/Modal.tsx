@@ -42,7 +42,7 @@ export default function Modal({
   if (!isOpen) return null
 
   return (
-    <div className='fixed inset-0 z-[100] flex items-end justify-center p-4 sm:items-center sm:p-6'>
+    <div className='fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6'>
       <button
         type='button'
         aria-label='Close dialog backdrop'

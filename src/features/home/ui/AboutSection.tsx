@@ -17,17 +17,12 @@ export function AboutSection({ profile }: IAboutSectionProps) {
   return (
     <section id='about' className='mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28'>
       <RevealOnScroll>
-        <SectionHeading
-          eyebrow={COPY.home.aboutTitle}
-          title={COPY.home.aboutHeadline}
-          description={COPY.home.aboutDescription}
-        />
+        <SectionHeading eyebrow={COPY.home.aboutTitle} title={COPY.home.aboutHeadline} />
       </RevealOnScroll>
 
       <RevealOnScroll delay={0.1} className='mt-10 grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:gap-12'>
         <div className='space-y-5'>
           <p className='text-lg leading-relaxed text-muted-foreground'>{profile.bio}</p>
-          <p className='max-w-2xl text-sm leading-7 text-subtle-foreground'>{COPY.home.aboutSupport}</p>
         </div>
 
         <Card className='overflow-hidden border-border/75 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--color-surface)_94%,transparent),color-mix(in_oklab,var(--color-surface-muted)_88%,transparent))]'>

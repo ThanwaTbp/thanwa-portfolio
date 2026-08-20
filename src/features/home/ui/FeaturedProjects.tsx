@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/Badge'
 import { buttonVariants } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 import { EmptyState } from '@/components/common/EmptyState'
+import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { SpotlightCard } from '@/components/common/SpotlightCard'
@@ -40,7 +41,7 @@ export function FeaturedProjects({ projects }: IFeaturedProjectsProps) {
 
       {projects.length === 0 ? (
         <EmptyState
-          icon={FolderX}
+          icon={emptyStateIcon(FolderX)}
           title={COPY.projects.empty.title}
           description={COPY.projects.empty.description}
           action={
@@ -60,11 +61,15 @@ export function FeaturedProjects({ projects }: IFeaturedProjectsProps) {
               <Link
                 key={project.slug}
                 href={`/projects/${project.slug}`}
-                className='block transition-transform duration-300 hover:-translate-y-1'
+                className='group block transition-transform duration-300 hover:-translate-y-1'
               >
                 <SpotlightCard>
                   <Card className='h-full overflow-hidden border-border/75 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--color-surface)_96%,transparent),color-mix(in_oklab,var(--color-surface-muted)_90%,transparent))]'>
                     <div className='relative flex aspect-16/10 items-end overflow-hidden bg-gradient-to-br from-accent/22 via-accent-2/14 to-surface-muted p-6'>
+                      <span
+                        aria-hidden='true'
+                        className='pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/16 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full'
+                      />
                       <span className='text-4xl font-semibold tracking-[-0.08em] text-accent/72'>
                         {getProjectInitials(project.title)}
                       </span>

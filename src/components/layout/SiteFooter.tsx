@@ -33,6 +33,7 @@ export default async function SiteFooter() {
   const navLinks = [
     { href: '/projects', label: COPY.nav.projects },
     { href: '/experience', label: COPY.nav.experience },
+    { href: '/education', label: COPY.nav.education },
     { href: '/skills', label: COPY.nav.skills },
   ]
 
@@ -83,7 +84,7 @@ export default async function SiteFooter() {
                   <Link
                     key={navLink.href}
                     href={navLink.href}
-                    className='text-sm text-muted-foreground transition-colors hover:text-foreground'
+                    className='text-sm text-muted-foreground transition-[color,transform] duration-200 hover:translate-x-0.5 hover:text-foreground'
                   >
                     {navLink.label}
                   </Link>
@@ -106,7 +107,7 @@ export default async function SiteFooter() {
                       target={socialLink.platform === 'email' ? undefined : '_blank'}
                       rel={socialLink.platform === 'email' ? undefined : 'noopener noreferrer'}
                       aria-label={socialLink.label}
-                      className='inline-flex size-10 items-center justify-center rounded-full border border-border/75 bg-surface text-muted-foreground transition-colors hover:border-accent/30 hover:text-foreground'
+                      className='inline-flex size-10 items-center justify-center rounded-full border border-border/75 bg-surface text-muted-foreground transition-[color,border-color,transform] duration-300 ease-out hover:-translate-y-0.5 hover:border-accent/30 hover:text-foreground'
                     >
                       <SocialIcon className='size-4' />
                     </a>

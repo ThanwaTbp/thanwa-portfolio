@@ -1,17 +1,7 @@
-import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-import AdminDashboard from '@/features/admin/ui/AdminDashboard'
-import { COPY } from '@/constants/copy'
+import { DEFAULT_ADMIN_ROUTE } from '@/features/admin/constants'
 
-export const metadata: Metadata = {
-  title: COPY.admin.title,
-  description: COPY.admin.description,
-  robots: {
-    index: false,
-    follow: false,
-  },
-}
-
-export default function AdminPage() {
-  return <AdminDashboard />
+export default function AdminIndexPage() {
+  redirect(DEFAULT_ADMIN_ROUTE)
 }

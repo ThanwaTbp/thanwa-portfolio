@@ -5,6 +5,7 @@ import type { IExperience } from '@/types/portfolio'
 import { formatDateRange } from '@/utils/date'
 import { buttonVariants } from '@/components/ui/Button'
 import { EmptyState } from '@/components/common/EmptyState'
+import { emptyStateIcon } from '@/components/common/emptyStateIcon'
 import { RevealOnScroll } from '@/components/common/RevealOnScroll'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { COPY } from '@/constants/copy'
@@ -32,7 +33,7 @@ export function ExperiencePreview({ experiences }: IExperiencePreviewProps) {
 
       {previewExperiences.length === 0 ? (
         <EmptyState
-          icon={Briefcase}
+          icon={emptyStateIcon(Briefcase)}
           title={COPY.experience.empty.title}
           description={COPY.experience.empty.description}
           action={
@@ -60,11 +61,7 @@ export function ExperiencePreview({ experiences }: IExperiencePreviewProps) {
               </div>
               <div className='flex-1 pb-2'>
                 <p className='text-sm font-medium text-accent'>
-                  {formatDateRange(
-                    experience.startDate,
-                    experience.endDate,
-                    COPY.common.present,
-                  )}
+                  {formatDateRange(experience.startDate, experience.endDate, COPY.common.present)}
                 </p>
                 <h3 className='mt-1 text-lg font-semibold text-foreground'>
                   {experience.position}

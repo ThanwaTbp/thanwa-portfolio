@@ -3,12 +3,12 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { ScrollProgress } from '@/components/common/ScrollProgress'
 import { TechIcon } from '@/components/common/TechIcon'
 import { Badge } from '@/components/ui/Badge'
 import { Separator } from '@/components/ui/Separator'
 import { ProjectDetailHero } from '@/features/projects/ui/ProjectDetailHero'
 import { ProjectHighlights } from '@/features/projects/ui/ProjectHighlights'
+import { ProjectLinks } from '@/features/projects/ui/ProjectLinks'
 import { ProjectNavigation } from '@/features/projects/ui/ProjectNavigation'
 import { COPY } from '@/constants/copy'
 import {
@@ -57,8 +57,6 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
 
   return (
     <>
-      <ScrollProgress />
-
       <div className='mx-auto max-w-6xl px-4 pt-8 sm:px-6 lg:px-8'>
         <Link
           href='/projects'
@@ -116,6 +114,8 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
               ))}
             </div>
           </div>
+
+          <ProjectLinks links={project.links} heading={COPY.projectDetail.links} />
         </aside>
       </div>
 
