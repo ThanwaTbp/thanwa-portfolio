@@ -22,8 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-// TODO: เปลี่ยนเป็นโดเมนจริงตอน deploy
-const siteUrl = 'https://thanwa-portfolio.vercel.app'
+const siteUrl = 'https://thw-profile.vercel.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
