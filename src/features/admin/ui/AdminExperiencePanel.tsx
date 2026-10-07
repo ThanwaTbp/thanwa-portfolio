@@ -289,6 +289,7 @@ export function AdminExperiencePanel({
                   {COPY.admin.experience.startDate}
                 </span>
                 <input
+                  type='month'
                   value={draft.startDate}
                   onChange={(e) => setDraft((d) => ({ ...d, startDate: e.target.value }))}
                   className='admin-input'
@@ -300,6 +301,7 @@ export function AdminExperiencePanel({
                   {COPY.admin.experience.endDate}
                 </span>
                 <input
+                  type='month'
                   value={draft.endDate}
                   onChange={(e) => setDraft((d) => ({ ...d, endDate: e.target.value }))}
                   className='admin-input'

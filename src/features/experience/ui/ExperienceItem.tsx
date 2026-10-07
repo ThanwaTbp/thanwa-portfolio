@@ -100,7 +100,7 @@ export function ExperienceItem({
         <span className='inline-flex items-center gap-1.5 rounded-md border border-border/70 bg-surface-muted/60 px-2.5 py-1 text-xs text-muted-foreground'>
           <Calendar className='size-3.5 text-accent' aria-hidden='true' />
           {dateRangeLabel}
-          <span className='text-subtle-foreground'>· {durationLabel}</span>
+          {durationLabel ? <span className='text-subtle-foreground'>· {durationLabel}</span> : null}
         </span>
         <span className='inline-flex items-center gap-1.5 rounded-md border border-border/70 bg-surface-muted/60 px-2.5 py-1 text-xs text-muted-foreground'>
           <MapPin className='size-3.5 text-accent-2' aria-hidden='true' />

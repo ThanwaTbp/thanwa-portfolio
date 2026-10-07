@@ -44,26 +44,29 @@ async function readAppwritePortfolioData(): Promise<IPortfolioData | null> {
 
   if (!config) return null
 
-  try {
-    const databases = createAppwriteDatabases()
-    const response = await databases.listDocuments({
-      databaseId: config.databaseId,
-      collectionId: config.collectionId,
-      queries: [Query.equal('key', PORTFOLIO_DOCUMENT_KEY), Query.limit(1)],
-    })
+  const databases = createAppwriteDatabases()
+  const response = await databases.listDocuments({
+    databaseId: config.databaseId,
+    collectionId: config.collectionId,
+    queries: [Query.equal('key', PORTFOLIO_DOCUMENT_KEY), Query.limit(1)],
+  })
 
-    const document = response.documents[0]
+  const document = response.documents[0]
 
-    if (!document || typeof document.payload !== 'string') {
-      return null
-    }
-
-    const parsed = JSON.parse(document.payload) as unknown
-    return isValidPortfolioData(parsed) ? parsed : null
-  } catch (error) {
-    console.error('Failed to read portfolio data from Appwrite', error)
+  if (!document) {
     return null
   }
+
+  if (typeof document.payload !== 'string') {
+    throw new Error('Invalid portfolio document in Appwrite')
+  }
+
+  const parsed = JSON.parse(document.payload) as unknown
+  if (!isValidPortfolioData(parsed)) {
+    throw new Error('Invalid portfolio data in Appwrite')
+  }
+
+  return parsed
 }
 
 async function writeAppwritePortfolioData(data: IPortfolioData) {
@@ -108,7 +111,14 @@ async function writeAppwritePortfolioData(data: IPortfolioData) {
 }
 
 export const loadPortfolioData = cache(async (): Promise<IPortfolioData> => {
-  const appwriteData = await readAppwritePortfolioData()
+  let appwriteData: IPortfolioData | null = null
+
+  try {
+    appwriteData = await readAppwritePortfolioData()
+  } catch (error) {
+    console.error('Failed to read portfolio data from Appwrite', error)
+  }
+
   if (appwriteData) return appwriteData
 
   const localData = await readLocalPortfolioData()
@@ -116,6 +126,14 @@ export const loadPortfolioData = cache(async (): Promise<IPortfolioData> => {
 
   return getDefaultPortfolioData()
 })
+
+export async function loadPortfolioDataForAdmin(): Promise<IPortfolioData> {
+  const appwriteData = await readAppwritePortfolioData()
+  if (appwriteData) return appwriteData
+
+  const localData = await readLocalPortfolioData()
+  return localData ?? getDefaultPortfolioData()
+}
 
 export async function savePortfolioData(data: IPortfolioData) {
   if (getAppwriteServerConfig()) {

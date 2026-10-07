@@ -245,6 +245,7 @@ export function AdminEducationPanel({
                   {COPY.admin.education.startDate}
                 </span>
                 <input
+                  type='month'
                   value={draft.startDate}
                   onChange={(e) => setDraft((d) => ({ ...d, startDate: e.target.value }))}
                   className='admin-input'
@@ -256,6 +257,7 @@ export function AdminEducationPanel({
                   {COPY.admin.education.endDate}
                 </span>
                 <input
+                  type='month'
                   value={draft.endDate}
                   onChange={(e) => setDraft((d) => ({ ...d, endDate: e.target.value }))}
                   className='admin-input'

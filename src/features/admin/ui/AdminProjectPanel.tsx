@@ -106,17 +106,20 @@ interface IAdminProjectPanelProps {
 export function AdminProjectPanel({ projects, isSaving, onSaveProjects }: IAdminProjectPanelProps) {
   const [projectDraft, setProjectDraft] = useState<IProjectDraft>(emptyProjectDraft)
   const [editingSlug, setEditingSlug] = useState<string | null>(null)
+  const [slugError, setSlugError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const { confirmDelete } = useAdminActionAlert()
 
   const openNewForm = () => {
     setEditingSlug(null)
+    setSlugError(null)
     setProjectDraft(emptyProjectDraft)
     setShowForm(true)
   }
 
   const openEditForm = (project: IProject) => {
     setEditingSlug(project.slug)
+    setSlugError(null)
     setProjectDraft(projectToDraft(project))
     setShowForm(true)
   }
@@ -124,6 +127,7 @@ export function AdminProjectPanel({ projects, isSaving, onSaveProjects }: IAdmin
   const closeForm = () => {
     setShowForm(false)
     setEditingSlug(null)
+    setSlugError(null)
     setProjectDraft(emptyProjectDraft)
   }
 
@@ -133,7 +137,12 @@ export function AdminProjectPanel({ projects, isSaving, onSaveProjects }: IAdmin
     const existingProject = editingSlug ? projects.find((p) => p.slug === editingSlug) : undefined
     const nextProject = draftToProject(projectDraft, existingProject)
 
-    if (!editingSlug && projects.some((p) => p.slug === nextProject.slug)) return
+    if (
+      projects.some((project) => project.slug === nextProject.slug && project.slug !== editingSlug)
+    ) {
+      setSlugError('This slug is already used by another project.')
+      return
+    }
 
     const nextProjects = editingSlug
       ? projects.map((p) => (p.slug === editingSlug ? nextProject : p))
@@ -254,10 +263,24 @@ export function AdminProjectPanel({ projects, isSaving, onSaveProjects }: IAdmin
                 </span>
                 <input
                   value={projectDraft.slug}
-                  onChange={(e) => setProjectDraft((d) => ({ ...d, slug: e.target.value }))}
+                  onChange={(e) => {
+                    setSlugError(null)
+                    setProjectDraft((d) => ({ ...d, slug: e.target.value }))
+                  }}
+                  aria-invalid={Boolean(slugError)}
+                  aria-describedby={slugError ? 'project-slug-error' : undefined}
                   className='admin-input'
                   required
                 />
+                {slugError ? (
+                  <span
+                    id='project-slug-error'
+                    role='alert'
+                    className='text-xs text-red-600 dark:text-red-400'
+                  >
+                    {slugError}
+                  </span>
+                ) : null}
               </label>
               <label className='space-y-1.5'>
                 <span className='text-xs font-medium text-muted-foreground'>

@@ -2,8 +2,9 @@ import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 import { requireAdminSession } from '@/lib/auth'
-import { loadPortfolioData, savePortfolioData } from '@/services/portfolio-store-service'
+import { loadPortfolioDataForAdmin, savePortfolioData } from '@/services/portfolio-store-service'
 import type { IPortfolioData } from '@/types/portfolio-data'
+import { isValidYearMonth } from '@/utils/date'
 
 function revalidatePortfolioPages() {
   revalidatePath('/', 'layout')
@@ -15,8 +16,28 @@ function revalidatePortfolioPages() {
 }
 
 export async function GET() {
-  const data = await loadPortfolioData()
-  return NextResponse.json(data)
+  try {
+    const data = await loadPortfolioDataForAdmin()
+    return NextResponse.json(data)
+  } catch (error) {
+    console.error('Failed to load admin portfolio data', error)
+    return NextResponse.json(
+      { error: 'Cannot load portfolio data from Appwrite. Check the project and try again.' },
+      { status: 503 },
+    )
+  }
+}
+
+function hasInvalidDates(entries: unknown[]) {
+  return entries.some((entry) => {
+    if (!entry || typeof entry !== 'object') return true
+
+    const dates = entry as { startDate?: unknown; endDate?: unknown }
+    return (
+      !isValidYearMonth(dates.startDate) ||
+      (dates.endDate !== null && !isValidYearMonth(dates.endDate))
+    )
+  })
 }
 
 export async function PUT(request: Request) {
@@ -35,6 +56,7 @@ export async function PUT(request: Request) {
   }
 
   if (
+    !body ||
     !body.profile ||
     !Array.isArray(body.projects) ||
     !Array.isArray(body.experiences) ||
@@ -42,6 +64,26 @@ export async function PUT(request: Request) {
     !Array.isArray(body.skillCategories)
   ) {
     return NextResponse.json({ error: 'Invalid portfolio payload' }, { status: 400 })
+  }
+
+  if (hasInvalidDates(body.experiences) || hasInvalidDates(body.educations)) {
+    return NextResponse.json(
+      { error: 'Experience and education dates must use YYYY-MM.' },
+      { status: 400 },
+    )
+  }
+
+  const slugs = body.projects.map((project) =>
+    typeof project?.slug === 'string' ? project.slug.trim() : '',
+  )
+  if (
+    slugs.some((slug) => !slug) ||
+    new Set(slugs).size !== slugs.length
+  ) {
+    return NextResponse.json(
+      { error: 'Project slugs must be present and unique.' },
+      { status: 400 },
+    )
   }
 
   try {

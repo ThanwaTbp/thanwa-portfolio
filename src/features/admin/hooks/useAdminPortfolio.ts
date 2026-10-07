@@ -29,13 +29,15 @@ export function useAdminPortfolio(isEnabled: boolean): IUseAdminPortfolioResult 
       const response = await fetch('/api/portfolio', { cache: 'no-store' })
 
       if (!response.ok) {
-        throw new Error('Failed to load portfolio data')
+        const payload = (await response.json()) as { error?: string }
+        throw new Error(payload.error ?? 'Failed to load portfolio data')
       }
 
       const payload = (await response.json()) as IPortfolioData
       setData(payload)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to load portfolio data'
+      setData(null)
       setErrorMessage(message)
     } finally {
       setIsLoading(false)
@@ -49,7 +51,10 @@ export function useAdminPortfolio(isEnabled: boolean): IUseAdminPortfolioResult 
 
     fetch('/api/portfolio', { cache: 'no-store' })
       .then(async (response) => {
-        if (!response.ok) throw new Error('Failed to load portfolio data')
+        if (!response.ok) {
+          const payload = (await response.json()) as { error?: string }
+          throw new Error(payload.error ?? 'Failed to load portfolio data')
+        }
         return (await response.json()) as IPortfolioData
       })
       .then((payload) => {
@@ -59,6 +64,7 @@ export function useAdminPortfolio(isEnabled: boolean): IUseAdminPortfolioResult 
       .catch((error) => {
         if (!isActive) return
         const message = error instanceof Error ? error.message : 'Failed to load portfolio data'
+        setData(null)
         setErrorMessage(message)
       })
       .finally(() => {

@@ -1,6 +1,8 @@
-/**
- * แปลง 'YYYY-MM' เป็นปี/เดือนแบบตัวเลข
- */
+export function isValidYearMonth(value: unknown): value is string {
+  return typeof value === 'string' && /^[1-9]\d{3}-(0[1-9]|1[0-2])$/.test(value)
+}
+
+/** แปลง 'YYYY-MM' เป็นปี/เดือนแบบตัวเลข */
 function parseYearMonth(dateString: string) {
   const [yearPart, monthPart] = dateString.split('-')
 
@@ -10,7 +12,11 @@ function parseYearMonth(dateString: string) {
   }
 }
 
-export function formatMonthYear(dateString: string) {
+export function formatMonthYear(dateString: unknown) {
+  if (!isValidYearMonth(dateString)) {
+    return typeof dateString === 'string' && dateString.trim() ? dateString : 'Unknown date'
+  }
+
   const { year, month } = parseYearMonth(dateString)
   const utcDate = new Date(Date.UTC(year, month - 1, 1))
 
@@ -33,6 +39,10 @@ export function calculateDurationInMonths(
   endDate: string | null,
   referenceDate?: Date,
 ) {
+  if (!isValidYearMonth(startDate) || (endDate !== null && !isValidYearMonth(endDate))) {
+    return null
+  }
+
   const start = parseYearMonth(startDate)
 
   const end = endDate
@@ -50,7 +60,9 @@ export function calculateDurationInMonths(
   return Math.max(totalMonths, 1)
 }
 
-export function formatDuration(months: number) {
+export function formatDuration(months: number | null) {
+  if (months === null) return ''
+
   const years = Math.floor(months / 12)
   const remainingMonths = months % 12
   const parts: string[] = []

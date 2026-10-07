@@ -31,7 +31,7 @@ export function AdminWorkspaceProvider({
   fallback,
   children,
 }: IAdminWorkspaceProviderProps) {
-  const { data, isSaving, errorMessage, save } = useAdminPortfolio(isEnabled)
+  const { data, isSaving, errorMessage, refresh, save } = useAdminPortfolio(isEnabled)
   const { success, error } = useAdminActionAlert()
 
   const saveAndNotify = useCallback(
@@ -62,6 +62,23 @@ export function AdminWorkspaceProvider({
         saveAndNotify({ ...data, skillCategories }),
     }
   }, [data, errorMessage, isSaving, saveAndNotify])
+
+  if (!value && errorMessage) {
+    return (
+      <div className='flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center'>
+        <p role='alert' className='max-w-md text-sm text-red-600 dark:text-red-400'>
+          {errorMessage}
+        </p>
+        <button
+          type='button'
+          onClick={() => void refresh()}
+          className='rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-surface-muted'
+        >
+          Try again
+        </button>
+      </div>
+    )
+  }
 
   if (!value) return fallback
 
